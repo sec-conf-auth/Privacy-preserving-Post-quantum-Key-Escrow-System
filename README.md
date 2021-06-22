@@ -81,4 +81,10 @@ chaincode:
         dynamicLink: true
    ```
    
- 4.Start the fabric network and deploy chaincodes.
+4.Start the fabric network and deploy chaincodes.
+ 
+ 
+# References
+[1] Liboqs, https://github.com/open-quantum-safe/liboqs
+
+[2] Liboqs-go, https://github.com/open-quantum-safe/liboqs-go

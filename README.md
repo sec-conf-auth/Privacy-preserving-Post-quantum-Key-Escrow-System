@@ -20,10 +20,11 @@ corresponding certificate and related information (e.g., password)
 are all stored in one line, and the certificate serial number is set as
 the key of the line.
 
+# About The Function of Client Codes
 Besides the chaincodes, we also develop client codes to help
 developers create their applications based on the PQ user
-authentication and key exchange system. As shown in Table 2,
-there are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
+authentication and key exchange system. 
+There are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
 which are written in Go and used to invoke the APIs in the
-corresponding chaincodes. The configuration files for the client
+corresponding chaincodes. The configuration files(e.g.,connection-profile.yaml) for the client
 codes to invoke the chaincodes are also provided.

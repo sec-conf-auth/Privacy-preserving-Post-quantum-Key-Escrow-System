@@ -28,3 +28,13 @@ There are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
 which are written in Go and used to invoke the APIs in the
 corresponding chaincodes. The configuration files(e.g.,connection-profile.yaml) for the client
 codes to invoke the chaincodes are also provided.
+
+# About The Use of Docker Image
+In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the
+native Hyperledger Fabric docker image for chaincode execution,
+we build a new docker image integrated with liboqs based on Ubuntu 18.04 and use it as the execution environment of our
+chaincodes. The versions of docker and docker-compose we use
+are 19.03.13 and 1.25.0-rc1. For developers, the configuration
+files for the client codes, the docker file to generate the new
+docker image and information about how to use the new image
+are also available.

@@ -50,7 +50,7 @@ are also available.
 3.Modify core.yaml.
 Set the `chaincode.builder` and `chaincode.golang.runtime` as `ccenv:latest`, and set the `chaincode.golang.dynamicLink` as `true`. The part of the code that needs to be modified in core.yaml is set as follows:
 
-```javascript
+```html
   ###############################################################################
 #
 #    Chaincode section

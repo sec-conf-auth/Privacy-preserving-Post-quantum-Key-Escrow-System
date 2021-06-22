@@ -38,3 +38,9 @@ are 19.03.13 and 1.25.0-rc1. For developers, the configuration
 files for the client codes, the docker file to generate the new
 docker image and information about how to use the new image
 are also available.
+
+1.In ccenv dockerfile, use the Ubuntu18.04 as the docker image environment, download and install liboqs library required for the experiment, install and configure the Go env(go1.15.7.linux-amd64.tar.gz).
+
+2.Build the dockerfile.
+
+   `docker built -t ccenv:latest ./ `

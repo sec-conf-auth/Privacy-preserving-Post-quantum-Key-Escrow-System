@@ -983,7 +983,7 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if len(args) != 10 {
 		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
-	// verify identity of the listener
+	// verify identity of the C
 	creator := GetCreator(stub)
 	if creator == "" {
 		return shim.Error("The operator of Getcreator is failed!")

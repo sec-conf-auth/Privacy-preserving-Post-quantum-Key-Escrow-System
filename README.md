@@ -43,4 +43,6 @@ are also available.
 
 2.Build the dockerfile.
 
-   `docker built -t ccenv:latest ./ `
+   ```javascript
+   docker built -t ccenv:latest ./ 
+   ```

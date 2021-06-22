@@ -26,7 +26,7 @@ developers create their applications based on the PQ user
 authentication and key exchange system. 
 There are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
 which are written in Go and used to invoke the APIs in the
-corresponding chaincodes. The configuration files(e.g.,connection-profile.yaml) for the client
+corresponding chaincodes. The configuration files(e.g.,`connection-profile.yaml`) for the client
 codes to invoke the chaincodes are also provided.
 
 # About The Use of Docker Image
@@ -39,10 +39,13 @@ files for the client codes, the docker file to generate the new
 docker image and information about how to use the new image
 are also available.
 
-1.In ccenv dockerfile, use the Ubuntu18.04 as the docker image environment, download and install liboqs library required for the experiment, install and configure the Go env(go1.15.7.linux-amd64.tar.gz).
+1.In ccenv dockerfile, use the `Ubuntu18.04` as the docker image environment, download and install `liboqs library` required for the experiment, install and configure the Go env(`go1.15.7.linux-amd64.tar.gz`).
 
 2.Build the dockerfile.
 
    ```javascript
    docker built -t ccenv:latest ./ 
    ```
+
+3.Modify core.yaml.
+Set the `chaincode.builder` and `chaincode.golang.runtime` as `ccenv:latest`, and set the `chaincode.golang.dynamicLink` as `true`. The part of the code that needs to be modified in core.yaml is set as follows:

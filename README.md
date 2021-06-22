@@ -49,3 +49,36 @@ are also available.
 
 3.Modify core.yaml.
 Set the `chaincode.builder` and `chaincode.golang.runtime` as `ccenv:latest`, and set the `chaincode.golang.dynamicLink` as `true`. The part of the code that needs to be modified in core.yaml is set as follows:
+
+```javascript
+  ###############################################################################
+#
+#    Chaincode section
+#
+###############################################################################
+chaincode:
+
+    # The id is used by the Chaincode stub to register the executing Chaincode
+    # ID with the Peer and is generally supplied through ENV variables
+    # the `path` form of ID is provided when installing the chaincode.
+    # The `name` is used for all other requests and can be any string.
+    id:
+        path:
+        name:
+
+    # Generic builder environment, suitable for most chaincode types
+    builder: ccenv:latest
+
+    # Enables/disables force pulling of the base docker images (listed below)
+    # during user chaincode instantiation.
+    # Useful when using moving image tags (such as :latest)
+    pull: false
+
+    golang:
+        # golang will never need more than baseos
+        runtime: ccenv:latest
+        # whether or not golang chaincode should be linked dynamically
+        dynamicLink: true
+   ```
+   
+ 4.Start the fabric network and deploy chaincodes.

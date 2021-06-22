@@ -1,3 +1,11 @@
-### The main features
+### Description
 
-Based on the PQ algorithm we studied, we divided the various algorithms into Level 1-2, Level 3 and Level 4-5 according to their security levels to conduct experiments to test their performance.
+In our experiments, we choose one PQ signature algorithm and
+one KEM algorithm at the same security level (i.e., in the same
+line of Table 3). It should be mentioned that we exclude the PQ
+signing algorithms Rainbow, GeMSS and the PQ KEM algorithm
+Classic McEliece from our analysis, because these three
+algorithms (with any parameter set) cause much more execution
+time and on-chain storage than other algorithms, make the figures
+almost unreadable and thus are not suitable for the consortium
+blockchains.

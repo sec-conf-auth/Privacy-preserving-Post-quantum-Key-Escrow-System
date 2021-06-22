@@ -2,7 +2,7 @@
 # About The Function of Chaincodes
 The main implementation of the PQ user authentication and key
 exchange system consists of two chaincodes, namely `PqCa` and
-`PqUser`. As shown in Table 2, the `PqCa` chaincode provides
+`PqUser`. The `PqCa` chaincode provides
 APIs to generate the PQ key pairs together with the related
 certificates (for the CA, the user identity key and the user KEM
 key), query one certificate (based on a given serial number),

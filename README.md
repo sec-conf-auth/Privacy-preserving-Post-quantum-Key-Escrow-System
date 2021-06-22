@@ -26,8 +26,8 @@ developers create their applications based on the PQ user
 authentication and key exchange system. 
 There are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
 which are written in Go and used to invoke the APIs in the
-corresponding chaincodes. The configuration files(e.g.,`connection-profile.yaml`) for the client
-codes to invoke the chaincodes are also provided.
+corresponding chaincodes. The configuration file (e.g.,`connection-profile.yaml`)for the client
+codes to invoke the chaincodes is also provided.
 
 # About The Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the
@@ -51,7 +51,7 @@ are also available.
 Set the `chaincode.builder` and `chaincode.golang.runtime` as `ccenv:latest`, and set the `chaincode.golang.dynamicLink` as `true`. The part of the code that needs to be modified in core.yaml is set as follows:
 
 ```html
-  ###############################################################################
+###############################################################################
 #
 #    Chaincode section
 #

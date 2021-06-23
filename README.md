@@ -83,7 +83,7 @@ chaincode:
    
 4.Start the fabric network and deploy chaincodes.
  
-# About The Experimentaldata
+# About The Experiment Data
 In our experiments, we choose one PQ signature algorithm and
 one KEM algorithm at the same security level . 
 

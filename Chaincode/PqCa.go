@@ -983,7 +983,7 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if len(args) != 10 {
 		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
-	// verify identity of the C
+	// verify identity of the CA
 	creator := GetCreator(stub)
 	if creator == "" {
 		return shim.Error("The operator of Getcreator is failed!")
@@ -991,6 +991,10 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if (creator != "Admin@org0.example.com") {
 		return shim.Error("The escrower doesn't have authority, so it can not modify the information!---creator:" + creator)
 	}
+/////////////////////////////////////////////////////////////////////
+// Verify that the CA is unique
+// and Read relevant information
+/////////////////////////////////////////////////////////////////////
 	if CAserial != false{
 	return shim.Error("The certCA has been registered!")
 	}
@@ -1015,7 +1019,9 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		// SerialNumber: 			"CN",
 		CommonName: 			str7,
 	}
-		
+/////////////////////////////////////////////////////////////////////
+// generate certCA 
+/////////////////////////////////////////////////////////////////////		
 	certCA, _ := CreateCA(clk, subCA, pwCA, sigName_pq)
 	fmt.Printf("\n===== The type of certCA is: %T =====\n", certCA)
 	certCAbytes,_ := marshalCert(certCA)
@@ -1024,6 +1030,9 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	fmt.Printf("\nThe rootCASerial of certCA which putstate is := %s\n", rootCASerialstring)
 	pwCAbytes :=[]byte(pwCA)
 	combinecertCAbytes :=bytes.Join([][]byte{pwCAbytes, certCAbytes}, []byte(";;;"))
+/////////////////////////////////////////////////////////////////////
+// put the certCA on chain 
+/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(rootCASerialstring,certCAbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1044,7 +1053,7 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if len(args) != 12 {
 		return shim.Error("Incorrect number of arguments. Expecting 12")
 	}
-	// verify identity of the listener
+	// verify identity of the CA
 	creator := GetCreator(stub)
 	if creator == "" {
 		return shim.Error("The operator of Getcreator is failed!")
@@ -1074,6 +1083,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		PostalCode: 			str6,
 		CommonName: 			str7,
 	}
+/////////////////////////////////////////////////////////////////////
+// Decode the certCAbytes
+/////////////////////////////////////////////////////////////////////
 	combinecertCAbytes,err := base64.StdEncoding.DecodeString(combinecertCAstring)
 	if err!=nil{
 		fmt.Println(err)
@@ -1081,6 +1093,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	enConBytes := bytes.Split(combinecertCAbytes, []byte(";;;"))
 	CApw := enConBytes[0]
 	pwCAsecond := string(CApw[:])
+/////////////////////////////////////////////////////////////////////
+// Verify password
+/////////////////////////////////////////////////////////////////////
 	if pwCAsecond != pwCA{
 		return shim.Error("Incorrect password")
 	}
@@ -1089,6 +1104,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certCA,_ :=unmarshalCert(certCAbytes)
 	rootCASerial2 := certCA.serialNumber
 	rootCASerialstring := rootCASerial2.String()
+/////////////////////////////////////////////////////////////////////
+// Generate certID 
+/////////////////////////////////////////////////////////////////////
 	certID, _ := GenerateIDCert(clk, certCA, pwCA, subID, pwID, sigName_pq,rootCASerialstring)
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
 	newserial := rootCASerial
@@ -1098,6 +1116,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certIDbytes_NoPrivKey,_ := marshalCert_NoPrivKey(certID)
 	pwIDbytes :=[]byte(pwID)
 	combinecertIDbytes :=bytes.Join([][]byte{pwIDbytes, certIDbytes}, []byte(";;;"))
+/////////////////////////////////////////////////////////////////////
+// Put the certID on chain 
+/////////////////////////////////////////////////////////////////////
 	err = stub.PutState(serialstring,certIDbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1129,10 +1150,16 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	pwID := args[1]
 	pwKE := args[2]
 	combinecertIDstring := args[3]
+/////////////////////////////////////////////////////////////////////
+// Decode the certIDbytes
+/////////////////////////////////////////////////////////////////////
 	combinecertIDbytes,_ := base64.StdEncoding.DecodeString(combinecertIDstring)
 	enConBytes := bytes.Split(combinecertIDbytes, []byte(";;;"))
 	convert := enConBytes[0]
 	pwIDsecond := string(convert[:])
+/////////////////////////////////////////////////////////////////////
+// Verify password
+/////////////////////////////////////////////////////////////////////
 	if pwIDsecond != pwID{
 		return shim.Error("Incorrect password")
 	}
@@ -1142,6 +1169,9 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certIDSerialstring := certID.serialNumber
 	Serialstring := certIDSerialstring.String()
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
+/////////////////////////////////////////////////////////////////////
+// Generate certKE 
+/////////////////////////////////////////////////////////////////////
 	certKE, _ := GenerateKeyEncapCert(clk, certID, pwID, pwKE, kemName_pq,Serialstring)
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
 	newserial2 := rootCASerial
@@ -1151,6 +1181,9 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certKEbytes_NoPrivKey,_ := marshalCert_NoPrivKey(certKE)
 	pwKEbytes :=[]byte(pwKE)
 	combinecertKEbytes :=bytes.Join([][]byte{pwKEbytes,certKEbytes}, []byte(";;;"))
+/////////////////////////////////////////////////////////////////////
+// Put the certKE on chain 
+/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(serialstring2 ,certKEbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1171,6 +1204,9 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 	Serialstring2 := args[0]
+/////////////////////////////////////////////////////////////////////
+// get the certKE from chain 
+/////////////////////////////////////////////////////////////////////
 	certKEbytes, err1 := stub.GetState(Serialstring2)
 	if err1 != nil {
 		return shim.Error(err1.Error())
@@ -1178,6 +1214,9 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certKE,_ :=unmarshalCert_NoPrivKey(certKEbytes)
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
 	Serialstring1 := certKE.parentKeySerialNum
+/////////////////////////////////////////////////////////////////////
+// get the certID from chain 
+/////////////////////////////////////////////////////////////////////
 	certIDbytes, err1 := stub.GetState(Serialstring1)
 	if err1 != nil {
 		return shim.Error(err1.Error())
@@ -1185,6 +1224,9 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certID,_ :=unmarshalCert_NoPrivKey(certIDbytes)
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
 	Serialstring0 := certID.parentKeySerialNum
+/////////////////////////////////////////////////////////////////////
+// get the certCA from chain 
+/////////////////////////////////////////////////////////////////////
 	certCAbytes, err1 := stub.GetState(Serialstring0)
 	if err1 != nil {
 		return shim.Error(err1.Error())

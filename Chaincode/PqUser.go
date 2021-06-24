@@ -454,7 +454,10 @@ func (t *user) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.R
 	Serialstring2 := args[0]
 	str2 := []byte(Serialstring2)
 	queryArgs := [][]byte{[]byte("Verify_Cert"), str2}
-	response := stub.InvokeChaincode("pqca", queryArgs, "mychannel")
+/////////////////////////////////////////////////////////////////////
+// Invoke the function Verify_Cert of PqCa Chaincode
+/////////////////////////////////////////////////////////////////////
+	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
 		return shim.Error(fmt.Sprintf("failed to query chaincode.got error :%s", response.Payload))
 	}
@@ -477,13 +480,20 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	Serialstring1 :=args[1]
 	str1 := []byte(Serialstring0)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
-	response := stub.InvokeChaincode("pqca", queryArgs, "mychannel")
+/////////////////////////////////////////////////////////////////////
+// Invoke the function Query_Cert of PqCa Chaincode
+// to get the cert
+/////////////////////////////////////////////////////////////////////
+	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
 		return shim.Error(fmt.Sprintf("failed to query chaincode.got error :%s", response.Payload))
 	}
 	startTime := time.Now()
 	combinecertKEbytes := response.Payload
 	certKE,_ :=unmarshalCert_NoPrivKey(combinecertKEbytes)
+/////////////////////////////////////////////////////////////////////
+// Generate encapSessionKey and sessionKey
+/////////////////////////////////////////////////////////////////////
 	encapSessionKey,  sessionKey, errs := GenEncapUploadSessionKey(certKE)
 	if errs != nil {
 		fmt.Println("\nGenEncapUploadSessionKey fails: ", errs)
@@ -493,6 +503,9 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	fmt.Printf("\n===== The length of sessionKey is: %d =====\n", len(sessionKey))
 	Serialstring := Serialstring1 + Serialstring0
 	fmt.Printf("\nThe Serialstring of encap is := %s\n", Serialstring)
+/////////////////////////////////////////////////////////////////////
+// Put the encapSessionKey on chain
+/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(Serialstring, encapSessionKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -515,6 +528,9 @@ func (t *user) Decap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	pwKE := args[0]
 	combinecert := args[1]
 	encapSerialstring := args[2]
+/////////////////////////////////////////////////////////////////////
+// Get the encapSessionKey from chain
+/////////////////////////////////////////////////////////////////////
 	encapSessionKey,err :=stub.GetState(encapSerialstring)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -529,6 +545,9 @@ func (t *user) Decap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	certKEbytes := encertKEbytes[1]
 	certKE,_ :=unmarshalCert(certKEbytes)
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
+/////////////////////////////////////////////////////////////////////
+// Decap the encapSessionKey to get sessionKey
+/////////////////////////////////////////////////////////////////////
 	sk, err5 := DownloadDecapSessionKey(encapSessionKey,  certKE, pwKE)
 	if err5 != nil {
 		fmt.Println("\nDownloadDecapSessionKey fails: ", err5)
@@ -548,7 +567,10 @@ func (t *user) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	Serialstring := args[0]
 	str1 := []byte(Serialstring)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
-	response := stub.InvokeChaincode("pqca", queryArgs, "mychannel")
+/////////////////////////////////////////////////////////////////////
+// Invoke the function Query_Cert of PqCa Chaincode
+/////////////////////////////////////////////////////////////////////
+	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
 		return shim.Error(fmt.Sprintf("failed to query chaincode.got error :%s", response.Payload))
 	}

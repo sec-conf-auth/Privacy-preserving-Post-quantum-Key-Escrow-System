@@ -420,13 +420,7 @@ func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)
 
 
 }
-////////////////////
-//////////////////////////////////////////////////////////////////
-// create the CA
-//////////////////////////////////////////////////////////////////
-// NOTE: 
-// Before creating the CA, the validity check of CA should be performed.
-// One should check whether the CA certificate is revoked or not.
+
 
 type user struct{}
 

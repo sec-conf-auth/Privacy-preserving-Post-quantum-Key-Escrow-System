@@ -1274,6 +1274,9 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	fmt.Println(" password correct")
 	certbytes := encertbytes[1]
 	cert,_ :=unmarshalCert(certbytes)
+/////////////////////////////////////////////////////////////////////
+// Revoked the cert
+/////////////////////////////////////////////////////////////////////
 	revokedcert,reason := RevokeCert(cert)
 	if reason != "right"{
 		return shim.Error(reason)
@@ -1284,6 +1287,9 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certBytes_NoPrivKey,_ := marshalCert_NoPrivKey(revokedcert)
 	pwbytes := []byte(pwcert)
 	revokedcombinecertbytes := bytes.Join([][]byte{pwbytes,certbytes}, []byte(";;;"))
+/////////////////////////////////////////////////////////////////////
+// Put the revoked cert on chain 
+/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(Serialstring, certBytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1308,6 +1314,9 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		return shim.Error(err1.Error())
 	}
 	cert,_ :=unmarshalCert_NoPrivKey(combinecertbytes)
+/////////////////////////////////////////////////////////////////////
+// Verify the cert and parent certs Whether are revoked
+/////////////////////////////////////////////////////////////////////
 	if cert.isKeyEncap == true {
 	certKE := cert
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)

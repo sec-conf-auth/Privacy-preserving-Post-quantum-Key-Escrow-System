@@ -31,7 +31,9 @@ import (
 
 	
 )
-
+/////////////////////////////////////////////////////////////////////
+// Channel related information for the client
+/////////////////////////////////////////////////////////////////////
 var (
         cc          = "pquser"
         user        = "Admin" 
@@ -44,7 +46,9 @@ var (
 
 
 
-
+/////////////////////////////////////////////////////////////////////
+// Use Go language to operate  databases
+/////////////////////////////////////////////////////////////////////
 func Query(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from ca where Serial= ?",key)
 	if err!=nil{
@@ -170,6 +174,9 @@ func main(){
 	}
 	args := os.Args
 	num :=args[1]
+/////////////////////////////////////////////////////////////////////
+// hoose the function of Chaincode
+/////////////////////////////////////////////////////////////////////
 	if num =="Verify_Cert"{		
 		newValue := args[2]
 		verify_CC(client, newValue )
@@ -199,7 +206,7 @@ func main(){
 
 
 
-//1---verify
+//1---Verify_Cert
 func verify_CC(client *channel.Client, newValue string) {
 	verifyArgs := [][]byte{[]byte(newValue)}
 	response, err := client.Query(channel.Request{
@@ -215,7 +222,7 @@ func verify_CC(client *channel.Client, newValue string) {
 	fmt.Println("Payload: ", ret)
 }
 
-//2---encap
+//2---Encap
 func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	encapArgs := [][]byte{[]byte(MyID_KE), []byte(OpID_KE)}
  
@@ -233,7 +240,7 @@ func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	fmt.Println("Payload: ", ret)
 }
 
-//3---decap
+//3---Decap
 func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string, ID_Encap string) {
 	db, err := sql.Open("mysql", "root:hzaucoi@tcp(127.0.0.1:3306)/cert?charset=utf8");
 	if err != nil {
@@ -256,7 +263,7 @@ func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string,
 
 
 
-//4---query
+//4---Query_Cert
 func query_CC(client *channel.Client, name string){
 	queryArgs := [][]byte{[]byte(name)}
 	response, err := client.Query(channel.Request{

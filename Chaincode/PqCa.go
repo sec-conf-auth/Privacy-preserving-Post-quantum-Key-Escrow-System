@@ -57,19 +57,19 @@ var layout string
 
 type Cert struct {
 	version 			string
-	serialNumber		*big.Int
+	serialNumber			*big.Int
 	issuer 				pkix.Name
 	subject 			pkix.Name
-	notBefore,notAfter 	time.Time
+	notBefore,notAfter 		time.Time
 	keyUsage 			x509.KeyUsage
 	sigName_pq			string
 	sig_pq				[]byte
 
 
 	algName_pq			string
-	privateKey_pq_PEM 	[]byte
+	privateKey_pq_PEM 		[]byte
 	pubKey_pq			[]byte
-	parentKeySerialNum	string
+	parentKeySerialNum		string
 	extensions			[]pkix.Extension
 
 	isKeyEncap			bool
@@ -81,11 +81,11 @@ type Cert struct {
 	// additional 		[]byte
 }
 type Cert_NoPrivKey struct {
-	version 			string
-	serialNumber		*big.Int
+	version 				string
+	serialNumber			*big.Int
 	issuer 				pkix.Name
 	subject 			pkix.Name
-	notBefore,notAfter 	time.Time
+	notBefore,notAfter 		time.Time
 	keyUsage 			x509.KeyUsage
 	sigName_pq			string
 	sig_pq				[]byte
@@ -93,7 +93,7 @@ type Cert_NoPrivKey struct {
 
 	algName_pq			string
 	pubKey_pq			[]byte
-	parentKeySerialNum	string
+	parentKeySerialNum		string
 	extensions			[]pkix.Extension
 
 	isKeyEncap			bool
@@ -106,29 +106,29 @@ type Cert_NoPrivKey struct {
 }
 type certgob struct {
 	Version 			string
-	SerialNumber		string
+	SerialNumber			string
 	Country				[]string
-	Organization  	[]string
-	OrganizationalUnit	[]string
+	Organization  			[]string
+	OrganizationalUnit		[]string
 	Locality 			[]string
 	Province 			[]string
-	StreetAddress 		[]string
+	StreetAddress 			[]string
 	PostalCode 			[]string
 	CommonName 			string
-	NotBefore,NotAfter 	string
+	NotBefore,NotAfter 		string
 	KeyUsage 			x509.KeyUsage
 	SigName_pq			string	
 	Sig_pq				[]byte
 
 
 	AlgName_pq			string
-	PrivateKey_pq_PEM 	[]byte
+	PrivateKey_pq_PEM 		[]byte
 	PubKey_pq			[]byte
-	ParentKeySerialNum	string
+	ParentKeySerialNum		string
 	Extensions			[]pkix.Extension
 
 	IsKeyEncap			bool
-	IsIndividual		bool
+	IsIndividual			bool
 	IsCA				bool
 	IsRevoked 			bool
 
@@ -137,16 +137,16 @@ type certgob struct {
 }
 type certgob_NoPrivKey struct {
 	Version 			string
-	SerialNumber		string
+	SerialNumber			string
 	Country				[]string
-	Organization 		[]string
-	OrganizationalUnit	[]string
+	Organization 			[]string
+	OrganizationalUnit		[]string
 	Locality 			[]string
 	Province 			[]string
-	StreetAddress 		[]string
+	StreetAddress 			[]string
 	PostalCode 			[]string
 	CommonName 			string
-	NotBefore,NotAfter 	string
+	NotBefore,NotAfter 		string
 	KeyUsage 			x509.KeyUsage
 	SigName_pq			string	
 	Sig_pq				[]byte
@@ -154,11 +154,11 @@ type certgob_NoPrivKey struct {
 
 	AlgName_pq			string
 	PubKey_pq			[]byte
-	ParentKeySerialNum	string
+	ParentKeySerialNum		string
 	Extensions			[]pkix.Extension
 
 	IsKeyEncap			bool
-	IsIndividual		bool
+	IsIndividual			bool
 	IsCA				bool
 	IsRevoked 			bool
 
@@ -203,13 +203,13 @@ func marshalCert(crt *Cert)([]byte, error){
 	SerialNumberstring:=crt.serialNumber.String()
 	cg := &certgob{
 		Version: 			crt.version,
-		SerialNumber:		SerialNumberstring,
+		SerialNumber:			SerialNumberstring,
 		Country: 			crt.subject.Country,
-		Organization: 		crt.subject.Organization,
-		OrganizationalUnit:	crt.subject.OrganizationalUnit,
+		Organization: 			crt.subject.Organization,
+		OrganizationalUnit:		crt.subject.OrganizationalUnit,
 		Locality:			crt.subject.Locality,
 		Province:			crt.subject.Province,
-		StreetAddress:		crt.subject.Province,
+		StreetAddress:			crt.subject.Province,
 		PostalCode:			crt.subject.PostalCode,
 		CommonName:			crt.subject.CommonName,
 		NotBefore:			NotBeforestring,
@@ -219,12 +219,12 @@ func marshalCert(crt *Cert)([]byte, error){
 		Sig_pq:				crt.sig_pq,
 
 		AlgName_pq:			crt.algName_pq,
-		PrivateKey_pq_PEM: 	crt.privateKey_pq_PEM,
+		PrivateKey_pq_PEM: 		crt.privateKey_pq_PEM,
 		PubKey_pq:			crt.pubKey_pq,
-		ParentKeySerialNum:	crt.parentKeySerialNum,
+		ParentKeySerialNum:		crt.parentKeySerialNum,
 
 		IsKeyEncap:			crt.isKeyEncap,
-		IsIndividual:		crt.isID,
+		IsIndividual:			crt.isID,
 		IsCA:				crt.isCA,
 		IsRevoked:			crt.isRevoked,
 	}
@@ -246,13 +246,13 @@ func marshalCert_NoPrivKey(crt *Cert)([]byte, error){
 	SerialNumberstring:=crt.serialNumber.String()
 	cg := &certgob_NoPrivKey{
 		Version: 			crt.version,
-		SerialNumber:		SerialNumberstring,
+		SerialNumber:			SerialNumberstring,
 		Country: 			crt.subject.Country,
-		Organization: 		crt.subject.Organization,
-		OrganizationalUnit:	crt.subject.OrganizationalUnit,
+		Organization: 			crt.subject.Organization,
+		OrganizationalUnit:		crt.subject.OrganizationalUnit,
 		Locality:			crt.subject.Locality,
 		Province:			crt.subject.Province,
-		StreetAddress:		crt.subject.Province,
+		StreetAddress:			crt.subject.Province,
 		PostalCode:			crt.subject.PostalCode,
 		CommonName:			crt.subject.CommonName,
 		NotBefore:			NotBeforestring,
@@ -263,10 +263,10 @@ func marshalCert_NoPrivKey(crt *Cert)([]byte, error){
 
 		AlgName_pq:			crt.algName_pq,
 		PubKey_pq:			crt.pubKey_pq,
-		ParentKeySerialNum:	crt.parentKeySerialNum,
+		ParentKeySerialNum:		crt.parentKeySerialNum,
 
 		IsKeyEncap:			crt.isKeyEncap,
-		IsIndividual:		crt.isID,
+		IsIndividual:			crt.isID,
 		IsCA:				crt.isCA,
 		IsRevoked:			crt.isRevoked,
 	}
@@ -292,11 +292,11 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 	}
 
 	sub := &pkix.Name{
-		Country: 				cg.Country,
+		Country: 			cg.Country,
 		Organization: 			cg.Organization,
-		OrganizationalUnit: 	cg.OrganizationalUnit,
-		Locality: 				cg.Locality,
-		Province: 				cg.Province,
+		OrganizationalUnit: 		cg.OrganizationalUnit,
+		Locality: 			cg.Locality,
+		Province: 			cg.Province,
 		StreetAddress: 			cg.StreetAddress,
 		PostalCode: 			cg.PostalCode,
 		// SerialNumber: 		        "CN",
@@ -308,7 +308,7 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 	SerialNumber,_:=new(big.Int).SetString(cg.SerialNumber,10)
 	crt := &Cert{
 		version: 			cg.Version,
-		serialNumber:		SerialNumber,
+		serialNumber:			SerialNumber,
 		issuer: 			*sub,
 		subject: 			*sub,
 		notBefore:			NotBefore,
@@ -318,9 +318,9 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		sig_pq:				cg.Sig_pq,
 
 		algName_pq:			cg.AlgName_pq,
-		privateKey_pq_PEM: 	cg.PrivateKey_pq_PEM,
+		privateKey_pq_PEM: 		cg.PrivateKey_pq_PEM,
 		pubKey_pq:			cg.PubKey_pq,
-		parentKeySerialNum:	cg.ParentKeySerialNum,
+		parentKeySerialNum:		cg.ParentKeySerialNum,
 
 		isKeyEncap:			cg.IsKeyEncap,
 		isID:				cg.IsIndividual,
@@ -341,11 +341,11 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 		return nil, fmt.Errorf("g.Decode: can't decode gob: %s", err)
 	}
 	sub := &pkix.Name{
-		Country: 				cg.Country,
+		Country: 			cg.Country,
 		Organization: 			cg.Organization,
-		OrganizationalUnit: 	cg.OrganizationalUnit,
-		Locality: 				cg.Locality,
-		Province: 				cg.Province,
+		OrganizationalUnit: 		cg.OrganizationalUnit,
+		Locality: 			cg.Locality,
+		Province: 			cg.Province,
 		StreetAddress: 			cg.StreetAddress,
 		PostalCode: 			cg.PostalCode,
 		// SerialNumber: 		        "CN",
@@ -356,7 +356,7 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	SerialNumber,_:=new(big.Int).SetString(cg.SerialNumber,10)
 	crt := &Cert_NoPrivKey{
 		version: 			cg.Version,
-		serialNumber:		SerialNumber,
+		serialNumber:			SerialNumber,
 		issuer: 			*sub,
 		subject: 			*sub,
 		notBefore:			NotBefore,
@@ -367,7 +367,7 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 
 		algName_pq:			cg.AlgName_pq,
 		pubKey_pq:			cg.PubKey_pq,
-		parentKeySerialNum:	cg.ParentKeySerialNum,
+		parentKeySerialNum:		cg.ParentKeySerialNum,
 
 		isKeyEncap:			cg.IsKeyEncap,
 		isID:				cg.IsIndividual,
@@ -420,7 +420,7 @@ func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, e
 	var sig_pq []byte
 	ck := &Cert{
 		version: 			"1.3",
-		serialNumber:		rootCASerial,
+		serialNumber:			rootCASerial,
 		issuer: 			*sub,
 		subject:			*sub,
 		notBefore:			now,
@@ -430,9 +430,9 @@ func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, e
 		sig_pq:				[]byte(""),
 
 		algName_pq:			sigName_pq,
-		privateKey_pq_PEM: 	privKey_pq_PEM,
+		privateKey_pq_PEM: 		privKey_pq_PEM,
 		pubKey_pq:			pubKey_pq,
-		parentKeySerialNum:	ParentSerialNum,
+		parentKeySerialNum:		ParentSerialNum,
 
 		isKeyEncap:			false,
 		isID:				false,
@@ -523,7 +523,7 @@ func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID s
 
 	ck := &Cert{
 		version: 			"1.3",
-		serialNumber:		serial,
+		serialNumber:			serial,
 		issuer: 			issuer,
 		subject:			*sub,
 		notBefore:			now,
@@ -533,9 +533,9 @@ func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID s
 		sig_pq:				[]byte(""),				// []byte
 
 		algName_pq:			sigName_pq,
-		privateKey_pq_PEM:	privKey_pq_PEM,
+		privateKey_pq_PEM:		privKey_pq_PEM,
 		pubKey_pq:			pubKey_pq,		// []byte
-		parentKeySerialNum:	ParentSerialNum,
+		parentKeySerialNum:		ParentSerialNum,
 
 		isKeyEncap:			false,
 		isID:				true,
@@ -636,7 +636,7 @@ func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap strin
 		
 	ck := &Cert{
 		version: 			"1.3",
-		serialNumber:		serial,
+		serialNumber:			serial,
 		issuer: 			issuer,
 		subject:			issuer,
 		notBefore:			now,
@@ -646,9 +646,9 @@ func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap strin
 		sig_pq:				[]byte(""),				// []byte
 
 		algName_pq:			kemName_pq,
-		privateKey_pq_PEM:	privateKey_pq_PEM,
+		privateKey_pq_PEM:		privateKey_pq_PEM,
 		pubKey_pq:			pubKey_pq,			// []byte
-		parentKeySerialNum:	ParentSerialNum,
+		parentKeySerialNum:		ParentSerialNum,
 
 		isKeyEncap:			true,
 		isID:				false,
@@ -715,7 +715,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 	sig_pq_ID := certID.sig_pq
 	ck_ID := &Cert{
 		version: 			certID.version,
-		serialNumber:		certID.serialNumber,
+		serialNumber:			certID.serialNumber,
 		issuer: 			certID.issuer,
 		subject:			certID.subject,
 		notBefore:			certID.notBefore,
@@ -726,7 +726,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 
 		algName_pq:			certID.algName_pq,		// string
 		pubKey_pq:			certID.pubKey_pq,	// []byte
-		parentKeySerialNum:	certID.parentKeySerialNum,
+		parentKeySerialNum:		certID.parentKeySerialNum,
 
 		isKeyEncap:			certID.isKeyEncap,
 		isID:				certID.isID,
@@ -772,7 +772,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 	sig_pq_KE := certKE.sig_pq
 	ck_KE := &Cert{
 		version: 			certKE.version,
-		serialNumber:		certKE.serialNumber,
+		serialNumber:			certKE.serialNumber,
 		issuer: 			certKE.issuer,
 		subject:			certKE.subject,
 		notBefore:			certKE.notBefore,
@@ -783,7 +783,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 
 		algName_pq:			certKE.algName_pq,		// string
 		pubKey_pq:			certKE.pubKey_pq,		// []byte
-		parentKeySerialNum:	certKE.parentKeySerialNum,
+		parentKeySerialNum:		certKE.parentKeySerialNum,
 
 		isKeyEncap:			certKE.isKeyEncap,
 		isID:				certKE.isID,
@@ -1009,14 +1009,14 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	str6  := []string{args[8]}
 	str7 := args[9]
 	subCA := &pkix.Name{
-		Country: 				str0,
+		Country: 			str0,
 		Organization: 			str1,
-		OrganizationalUnit: 	str2,
-		Locality: 				str3,
-		Province: 				str4,
+		OrganizationalUnit: 		str2,
+		Locality: 			str3,
+		Province: 			str4,
 		StreetAddress: 			str5,
 		PostalCode: 			str6,
-		// SerialNumber: 			"CN",
+		// SerialNumber: 		"CN",
 		CommonName: 			str7,
 	}
 /////////////////////////////////////////////////////////////////////
@@ -1074,11 +1074,11 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	str6  := []string{args[10]}
 	str7 := args[11]
 	subID := &pkix.Name{
-		Country: 				str0,
+		Country: 			str0,
 		Organization: 			str1,
-		OrganizationalUnit: 	str2,
-		Locality: 				str3,
-		Province: 				str4,
+		OrganizationalUnit: 		str2,
+		Locality: 			str3,
+		Province: 			str4,
 		StreetAddress: 			str5,
 		PostalCode: 			str6,
 		CommonName: 			str7,

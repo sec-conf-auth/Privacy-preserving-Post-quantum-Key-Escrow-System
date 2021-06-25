@@ -35,7 +35,7 @@ import (
 // Channel related information for the client
 /////////////////////////////////////////////////////////////////////
 var (
-        cc          = "pquser"
+        cc          = "PqUser"
         user        = "Admin" 
         secret      = ""
         channelName = "mychannel"

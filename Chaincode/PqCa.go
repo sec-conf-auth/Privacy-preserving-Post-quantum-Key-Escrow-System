@@ -808,7 +808,7 @@ func RevokeCert(cert *Cert)(*Cert,string){
 	return cert,"right"
 }
 	/////////////////////////////////////////////////////////////////////
-	// Verify the cert and its pareent certs whether is revoked
+	// Verify the certKE and its parent certs whether they are revoked
 	/////////////////////////////////////////////////////////////////////
 func VerifyCertChain_ThreeLayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cert_NoPrivKey)(bool, string){
 	if certCA.isRevoked == true {
@@ -823,7 +823,10 @@ func VerifyCertChain_ThreeLayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey,
 	return true, "no cert has been revoked"
 }
 
-func VerifyCertChainisrevoked_twolayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey)(bool, string){
+	/////////////////////////////////////////////////////////////////////
+	// Verify the certID and its parent cert whether they are revoked
+	/////////////////////////////////////////////////////////////////////
+func VerifyCertChain_TwoLayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey)(bool, string){
 	if certCA.isRevoked == true {
 		return false, "The CA cert has been revoked"
 	}
@@ -834,7 +837,10 @@ func VerifyCertChainisrevoked_twolayers(certCA *Cert_NoPrivKey, certID *Cert_NoP
 	return true, "no cert has been revoked"
 }
 
-func VerifyCertChainisrevoked_onelayers(certCA *Cert_NoPrivKey)(bool, string){
+	/////////////////////////////////////////////////////////////////////
+	// Verify the certCA  whether it is revoked
+	/////////////////////////////////////////////////////////////////////
+func VerifyCertChain_OneLayers(certCA *Cert_NoPrivKey)(bool, string){
 	if certCA.isRevoked == true {
 		return false, "The CA cert has been revoked"
 	}

@@ -81,7 +81,7 @@ type Cert struct {
 	// additional 		[]byte
 }
 type Cert_NoPrivKey struct {
-	version 				string
+	version 			string
 	serialNumber			*big.Int
 	issuer 				pkix.Name
 	subject 			pkix.Name
@@ -187,14 +187,12 @@ func randSerial() *big.Int {
 		if err != nil {
 			panic(fmt.Errorf("ca: can't generate serial#: %w", err))
 		}
-
 		if serial.Cmp(min) > 0 {
 			return serial
 		}
 	}
 	panic("can't gen new CA serial")
 }
-
 
 func marshalCert(crt *Cert)([]byte, error){
 	sn := crt.subject.CommonName
@@ -235,7 +233,6 @@ func marshalCert(crt *Cert)([]byte, error){
 	if err != nil {
 		return nil, fmt.Errorf("%s: can't gob-encode cert: %s", sn, err)
 	}
-
 	return b.Bytes(), nil
 }
 
@@ -270,20 +267,17 @@ func marshalCert_NoPrivKey(crt *Cert)([]byte, error){
 		IsCA:				crt.isCA,
 		IsRevoked:			crt.isRevoked,
 	}
-
 	var b bytes.Buffer
 	g := gob.NewEncoder(&b)
 	err := g.Encode(cg)
 	if err != nil {
 		return nil, fmt.Errorf("%s: can't gob-encode cert: %s", sn, err)
 	}
-
 	return b.Bytes(), nil
 }
 
 func unmarshalCert(crtBytes []byte)(*Cert, error){
 	var cg certgob
-	
 	b := bytes.NewBuffer(crtBytes)
 	g := gob.NewDecoder(b)
 	err := g.Decode(&cg)
@@ -327,13 +321,11 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
 
 func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	var cg certgob
-	
 	b := bytes.NewBuffer(crtBytes)
 	g := gob.NewDecoder(b)
 	err := g.Decode(&cg)
@@ -374,16 +366,15 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
-//////////////////////////////////////////////////////////////////
-// create the CA
-//////////////////////////////////////////////////////////////////
-// NOTE: 
-// Before creating the CA, the validity check of CA should be performed.
-// One should check whether the CA certificate is revoked or not.
-//////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
+	// create the CA
+	//////////////////////////////////////////////////////////////////
+	// NOTE: 
+	// Before creating the CA, the validity check of CA should be performed.
+	// One should check whether the CA certificate is revoked or not.
+	//////////////////////////////////////////////////////////////////
 
 func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, error) {
 
@@ -439,19 +430,12 @@ func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, e
 		isCA:				true,
 		isRevoked:			false,
 	}
-
-	
-
-
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Self-sign the certificate info using the PQ signing key
 	//////////////////////////////////////////////////////////////////////////////	
-
 	certBytes, _ := marshalCert_NoPrivKey(ck)
 	sig_pq, _ = signer.Sign(certBytes)
 	ck.sig_pq = sig_pq
-
 	///////////////////////////////////////////////////////////////
 	// Return the generated certificate
 	///////////////////////////////////////////////////////////////
@@ -463,37 +447,32 @@ func NewSerial(caSerial *big.Int) (*big.Int) {
 	new := big.NewInt(1)
 	caSerial.Add(caSerial, new)
 	new.Set(caSerial)
-
 	return new
 }
 
-//////////////////////////////////////////////////////////////////
-// Generate Certificate for Individual or Company
-//////////////////////////////////////////////////////////////////
-// NOTE: 
-// Before the certificate creation, the CA validity check should be performed.
-// One should check whether the CA certificate is revoked or not.
-//////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
+	// Generate Certificate for Individual or Company
+	//////////////////////////////////////////////////////////////////
+	// NOTE: 
+	// Before the certificate creation, the CA validity check should be performed.
+	// One should check whether the CA certificate is revoked or not.
+	//////////////////////////////////////////////////////////////////
 
 func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID string, sigName_pq string,ParentSerialNum string) (*Cert, error) {
 	serial := NewSerial(rootCASerial)
 	fmt.Printf("\nThe new serial := %d\n", serial)
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Generate a pair of pq signing key for an ID
 	// and export its private key in PEM as privKey_pq_PEM
 	//////////////////////////////////////////////////////////////////////////////
 	signer := oqs.Signature{}
 	defer signer.Clean() // clean up even in case of panic
-
 	if err := signer.Init(sigName_pq, nil); err != nil {
 		log.Fatal(err)
 	}
 
 	pubKey_pq, err := signer.GenerateKeyPair()
 	privKey_pq := signer.ExportSecretKey()
-
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Encrypt the newly-generated PQ private key
 	//////////////////////////////////////////////////////////////////////////////
@@ -512,15 +491,12 @@ func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID s
 	passCA := []byte(pwCA)
 	privKey_pq_PEMBlock_CA, _ := pem.Decode(certCA.privateKey_pq_PEM)
 	privKey_pq_CA, _ := x509.DecryptPEMBlock(privKey_pq_PEMBlock_CA, passCA)
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Prepare the Time, Issuer and Subject Name
 	//////////////////////////////////////////////////////////////////////////////
 	now := clk.Now()
 	issuer := certCA.issuer
-
 	var sig_pq []byte
-
 	ck := &Cert{
 		version: 			"1.3",
 		serialNumber:			serial,
@@ -542,67 +518,50 @@ func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID s
 		isCA:				false,
 		isRevoked:			false,
 	}
-
-	
 	////////////////////////////////////////////////////////////////
 	// Initialize the PQ signer based on the CA PQ signing secret key
 	////////////////////////////////////////////////////////////////
 	signer_CA := oqs.Signature{}
 	defer signer_CA.Clean() // clean up even in case of panic
-
 	if err := signer_CA.Init(certCA.algName_pq, privKey_pq_CA); err != nil {
 		log.Fatal(err)
 	}
-
 	certBytes, _ := marshalCert_NoPrivKey(ck)
-
-
 	////////////////////////////////////////////////////////////////
 	// Generate the PQ signature "sig_pq" for the Cert structure "ck"
 	////////////////////////////////////////////////////////////////
 	sig_pq, _ = signer_CA.Sign(certBytes)
-
 	// Store the generated PQ signature in the Cert structure
 	ck.sig_pq = sig_pq
-
 	////////////////////////////////////////////////////////////////
 	// Signature validation for sanity check
 	////////////////////////////////////////////////////////////////
-	
 	return ck, nil
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// Based on ID certificate, generate Key Encapsulation 
-// (key pair) Certificate for the same ID
-//////////////////////////////////////////////////////////////////////////////////
-// NOTE: Before the certificate creation, 
-// the CA and ID certificates validity check should be performed.
-// One should check whether the CA and ID certificates are revoked or not.
-//////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+	// Based on ID certificate, generate Key Encapsulation 
+	// (key pair) Certificate for the same ID
+	//////////////////////////////////////////////////////////////////////////////////
+	// NOTE: Before the certificate creation, 
+	// the CA and ID certificates validity check should be performed.
+	// One should check whether the CA and ID certificates are revoked or not.
+	//////////////////////////////////////////////////////////////////////////////////
 
 func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap string, kemName_pq string,ParentSerialNum string) (*Cert, error) {
-
 	serial := NewSerial(rootCASerial)
-
 	fmt.Printf("\nThe new serial := %d\n", serial)
-
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Generate a pair of pq signing key for a KE
 	// and export its private key in PEM as privateKey_pq_PEM
 	//////////////////////////////////////////////////////////////////////////////
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
-
 	if err := kemer.Init(kemName_pq, nil); err != nil {
 		log.Fatal(err)
 	}
-
 	pubKey_pq, err := kemer.GenerateKeyPair()
 	privateKey_pq := kemer.ExportSecretKey()
-
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Encrypt the newly-generated PQ private key
 	//////////////////////////////////////////////////////////////////////////////
@@ -613,8 +572,6 @@ func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap strin
 		return nil, err
 	}
 	privateKey_pq_PEM := pem.EncodeToMemory(privateKey_pq_PEMBlock)
-
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Decrypt the PQ private key based the given ID
 	// in order to sign the newly-generated Key Encapsulation certificate
@@ -622,18 +579,15 @@ func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap strin
 	passID := []byte(pwID)
 	privateKey_pq_PEMBlock_ID, _ := pem.Decode(certID.privateKey_pq_PEM)
 	privateKey_pq_ID, _ := x509.DecryptPEMBlock(privateKey_pq_PEMBlock_ID, passID)
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Prepare the Time, Issuer and Subject Name
 	//////////////////////////////////////////////////////////////////////////////
 	now := clk.Now()
 	issuer := certID.issuer
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Create the certificate request template
 	//////////////////////////////////////////////////////////////////////////////
 	var sig_pq []byte
-		
 	ck := &Cert{
 		version: 			"1.3",
 		serialNumber:			serial,
@@ -655,34 +609,24 @@ func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap strin
 		isCA:				false,
 		isRevoked:			false,
 	}
-
-	
 	////////////////////////////////////////////////////////////////
 	// Initialize the PQ signer based on the ID PQ signing secret key
 	////////////////////////////////////////////////////////////////
 	signer_ID := oqs.Signature{}
 	defer signer_ID.Clean() // clean up even in case of panic
-
 	sigName_pq_ID := certID.algName_pq
 	if err := signer_ID.Init(sigName_pq_ID, privateKey_pq_ID); err != nil {
 		log.Fatal(err)
 	}
-
 	certBytes, _ := marshalCert_NoPrivKey(ck)
-
-
 	////////////////////////////////////////////////////////////////
 	// Generate the PQ signature "sig_pq" for the Cert structure "ck"
 	////////////////////////////////////////////////////////////////
 	sig_pq, _ = signer_ID.Sign(certBytes)
-
-
 	// Store the generated PQ signature in the Cert structure
 	ck.sig_pq = sig_pq
 	return ck, nil
 }
-
-
 
 func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cert_NoPrivKey)(bool, string){
 	startTime1 := time.Now()
@@ -704,9 +648,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 	/////////////////////////////////////////////////////////////////////
 	// Verify the signature signed by the CA 
 	/////////////////////////////////////////////////////////////////////
-	
 	fmt.Println("\nVerification on signature signed by CA succeeds")
-	
 	/////////////////////////////////////////////////////////////////////
 	// Verify the PQ signature signed by the CA 
 	/////////////////////////////////////////////////////////////////////
@@ -738,8 +680,6 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 		log.Fatal(err)
 		return false, err.Error()
 	}
-
-
 	verifierCA := oqs.Signature{}
 	defer verifierCA.Clean() // clean up even in case of panic
 
@@ -747,19 +687,15 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 		log.Fatal(err)
 		return false, err.Error()
 	}
-
 	isValid, err := verifierCA.Verify(ck_ID_bytes, sig_pq_ID, pubKey_pq_CA)
 	if err != nil {
 		log.Fatal(err)
 		return false, err.Error()
 	}
-
 	fmt.Println("\nVerification on PQ signature signed by CA succeeds", isValid)
-
 	/////////////////////////////////////////////////////////////////////
 	// Verify the signature signed by the ID 
 	/////////////////////////////////////////////////////////////////////
-	
 	fmt.Println("\nVerification on signature signed by the ID succeeds")
 	elapsedTime1 := time.Since(startTime1)
 	fmt.Println("The certCA and certID Verify time is ",elapsedTime1)
@@ -795,8 +731,6 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 		log.Fatal(err)
 		return false, err.Error()
 	}
-
-
 	verifierID := oqs.Signature{}
 	defer verifierID.Clean() // clean up even in case of panic
 
@@ -804,13 +738,11 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 		log.Fatal(err)
 		return false, err.Error()
 	}
-
 	isValid2, err2 := verifierID.Verify(ck_KE_bytes, sig_pq_KE, pubKey_pq_ID)
 	if err2 != nil {
 		log.Fatal(err2)
 		return false, err2.Error()
 	}
-
 	fmt.Println("\nVerification on PQ signature signed by the ID succeeds", isValid2)
 	elapsedTime2 := time.Since(startTime2)
 	fmt.Println("The certKE and certID Verify time is ",elapsedTime2)
@@ -818,9 +750,7 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 
 }
 
-
 func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
-
 	kemName := certKE.algName_pq
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
@@ -840,11 +770,8 @@ func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
 		log.Fatal(err)
 		return nil,  nil, err
 	}
-
 	return encapSessionKey, sessionKey, nil
 }
-
-
 
 func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)([]byte, error){
 
@@ -855,28 +782,19 @@ func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)
 	passKE := []byte(pwKE)
 	privateKey_pq_PEMBlock_KE, _ := pem.Decode(certKE.privateKey_pq_PEM)
 	privateKey_pq_KE, _ := x509.DecryptPEMBlock(privateKey_pq_PEMBlock_KE, passKE)
-	
-
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
-
 	if err := kemer.Init(certKE.algName_pq, privateKey_pq_KE); err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-
 	sessionKey, err := kemer.DecapSecret(encapSessionKey)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-
 	fmt.Printf("\nsessionKey in DecapSecret [length=%d]:\n", len(sessionKey))
-
-
 	return sessionKey, nil
-
-
 }
 
 func RevokeCert(cert *Cert)(*Cert,string){
@@ -889,16 +807,16 @@ func RevokeCert(cert *Cert)(*Cert,string){
 	cert.isRevoked = true
 	return cert,"right"
 }
-
-func VerifyCertChainisrevoked_threelayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cert_NoPrivKey)(bool, string){
+	/////////////////////////////////////////////////////////////////////
+	// Verify the cert and its pareent certs whether is revoked
+	/////////////////////////////////////////////////////////////////////
+func VerifyCertChain_ThreeLayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cert_NoPrivKey)(bool, string){
 	if certCA.isRevoked == true {
 		return false, "The CA cert has been revoked"
 	}
-
 	if certID.isRevoked == true {
 		return false, "The ID cert has been revoked"
 	}
-
 	if certKE.isRevoked == true {
 		return false, "The KE cert has been revoked"
 	}
@@ -923,6 +841,9 @@ func VerifyCertChainisrevoked_onelayers(certCA *Cert_NoPrivKey)(bool, string){
 	return true, "no cert has been revoked"
 }
 
+	/////////////////////////////////////////////////////////////////////
+	// Verify the identity of the user
+	/////////////////////////////////////////////////////////////////////
 func GetCreator(stub shim.ChaincodeStubInterface) string {
 	creatorByte, _ := stub.GetCreator()
 	fmt.Println(string(creatorByte))
@@ -973,10 +894,9 @@ func (t *ca) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Error("Recevied unkown function invocation")
 }
 
-/////////////////////////////////////////////////////////////////////
-// Generate the key pair and certificate
-// (self-signed)for the CA
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Generate the key pair and certificate (self-signed) for the CA
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	clk = newSysClock()
@@ -991,10 +911,10 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if (creator != "Admin@org0.example.com") {
 		return shim.Error("The escrower doesn't have authority, so it can not modify the information!---creator:" + creator)
 	}
-/////////////////////////////////////////////////////////////////////
-// Verify that the CA is unique
-// and Read relevant information
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Verify that the CA is unique
+	// and read relevant information
+	/////////////////////////////////////////////////////////////////////
 	if CAserial != false{
 	return shim.Error("The certCA has been registered!")
 	}
@@ -1019,9 +939,9 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		// SerialNumber: 		"CN",
 		CommonName: 			str7,
 	}
-/////////////////////////////////////////////////////////////////////
-// generate certCA 
-/////////////////////////////////////////////////////////////////////		
+	/////////////////////////////////////////////////////////////////////
+	// Generate certCA 
+	/////////////////////////////////////////////////////////////////////		
 	certCA, _ := CreateCA(clk, subCA, pwCA, sigName_pq)
 	fmt.Printf("\n===== The type of certCA is: %T =====\n", certCA)
 	certCAbytes,_ := marshalCert(certCA)
@@ -1030,9 +950,9 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	fmt.Printf("\nThe rootCASerial of certCA which putstate is := %s\n", rootCASerialstring)
 	pwCAbytes :=[]byte(pwCA)
 	combinecertCAbytes :=bytes.Join([][]byte{pwCAbytes, certCAbytes}, []byte(";;;"))
-/////////////////////////////////////////////////////////////////////
-// put the certCA on chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Put the certCA on chain 
+	/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(rootCASerialstring,certCAbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1042,12 +962,11 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	fmt.Println("The certCA time is ",elapsedTime)
 	CAserial = true
 	return shim.Success(combinecertCAbytes)
-}
+	}
 
-/////////////////////////////////////////////////////////////////////
-// Generate the key pair and ID certificate
-// (signed by the CA)for each user
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Generate the key pair and ID certificate (signed by the CA) for each user
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	if len(args) != 12 {
@@ -1083,9 +1002,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		PostalCode: 			str6,
 		CommonName: 			str7,
 	}
-/////////////////////////////////////////////////////////////////////
-// Decode the certCAbytes
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Decode the certCAbytes
+	/////////////////////////////////////////////////////////////////////
 	combinecertCAbytes,err := base64.StdEncoding.DecodeString(combinecertCAstring)
 	if err!=nil{
 		fmt.Println(err)
@@ -1093,9 +1012,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	enConBytes := bytes.Split(combinecertCAbytes, []byte(";;;"))
 	CApw := enConBytes[0]
 	pwCAsecond := string(CApw[:])
-/////////////////////////////////////////////////////////////////////
-// Verify password
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Verify password
+	/////////////////////////////////////////////////////////////////////
 	if pwCAsecond != pwCA{
 		return shim.Error("Incorrect password")
 	}
@@ -1104,9 +1023,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certCA,_ :=unmarshalCert(certCAbytes)
 	rootCASerial2 := certCA.serialNumber
 	rootCASerialstring := rootCASerial2.String()
-/////////////////////////////////////////////////////////////////////
-// Generate certID 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Generate certID 
+	/////////////////////////////////////////////////////////////////////
 	certID, _ := GenerateIDCert(clk, certCA, pwCA, subID, pwID, sigName_pq,rootCASerialstring)
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
 	newserial := rootCASerial
@@ -1116,9 +1035,9 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certIDbytes_NoPrivKey,_ := marshalCert_NoPrivKey(certID)
 	pwIDbytes :=[]byte(pwID)
 	combinecertIDbytes :=bytes.Join([][]byte{pwIDbytes, certIDbytes}, []byte(";;;"))
-/////////////////////////////////////////////////////////////////////
-// Put the certID on chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Put the certID on chain 
+	/////////////////////////////////////////////////////////////////////
 	err = stub.PutState(serialstring,certIDbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1129,16 +1048,15 @@ func (t *ca) Gen_CertID(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	return shim.Success(combinecertIDbytes)
 }
 
-/////////////////////////////////////////////////////////////////////
-// Generate the KEM key pair and KE
-// certifate for each user
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Generate the KEM key pair and KE certifate for each user
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	if len(args) != 4 {
 		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
-	// verify identity of the listener
+	// verify identity of the CA
 	creator := GetCreator(stub)
 	if creator == "" {
 		return shim.Error("The operator of Getcreator is failed!")
@@ -1150,16 +1068,16 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	pwID := args[1]
 	pwKE := args[2]
 	combinecertIDstring := args[3]
-/////////////////////////////////////////////////////////////////////
-// Decode the certIDbytes
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Decode the certIDbytes
+	/////////////////////////////////////////////////////////////////////
 	combinecertIDbytes,_ := base64.StdEncoding.DecodeString(combinecertIDstring)
 	enConBytes := bytes.Split(combinecertIDbytes, []byte(";;;"))
 	convert := enConBytes[0]
 	pwIDsecond := string(convert[:])
-/////////////////////////////////////////////////////////////////////
-// Verify password
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Verify password
+	/////////////////////////////////////////////////////////////////////
 	if pwIDsecond != pwID{
 		return shim.Error("Incorrect password")
 	}
@@ -1169,9 +1087,9 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certIDSerialstring := certID.serialNumber
 	Serialstring := certIDSerialstring.String()
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
-/////////////////////////////////////////////////////////////////////
-// Generate certKE 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Generate certKE 
+	/////////////////////////////////////////////////////////////////////
 	certKE, _ := GenerateKeyEncapCert(clk, certID, pwID, pwKE, kemName_pq,Serialstring)
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
 	newserial2 := rootCASerial
@@ -1181,9 +1099,9 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	certKEbytes_NoPrivKey,_ := marshalCert_NoPrivKey(certKE)
 	pwKEbytes :=[]byte(pwKE)
 	combinecertKEbytes :=bytes.Join([][]byte{pwKEbytes,certKEbytes}, []byte(";;;"))
-/////////////////////////////////////////////////////////////////////
-// Put the certKE on chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Put the certKE on chain 
+	/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(serialstring2 ,certKEbytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1192,21 +1110,21 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The certKE time is ",elapsedTime)
 		return shim.Success(combinecertKEbytes)
-}
+	}
 
-/////////////////////////////////////////////////////////////////////
-// Verify one certificate and its parent
-// certificates in the certificate chain
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Verify one certificate and its parent
+	// certificates in the certificate chain
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	if len(args) != 1{
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 	Serialstring2 := args[0]
-/////////////////////////////////////////////////////////////////////
-// get the certKE from chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// get the certKE from pubilc ledger
+	/////////////////////////////////////////////////////////////////////
 	certKEbytes, err1 := stub.GetState(Serialstring2)
 	if err1 != nil {
 		return shim.Error(err1.Error())
@@ -1214,9 +1132,9 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certKE,_ :=unmarshalCert_NoPrivKey(certKEbytes)
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
 	Serialstring1 := certKE.parentKeySerialNum
-/////////////////////////////////////////////////////////////////////
-// get the certID from chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// get the certID from pubilc ledger
+	/////////////////////////////////////////////////////////////////////
 	certIDbytes, err1 := stub.GetState(Serialstring1)
 	if err1 != nil {
 		return shim.Error(err1.Error())
@@ -1224,9 +1142,9 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certID,_ :=unmarshalCert_NoPrivKey(certIDbytes)
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
 	Serialstring0 := certID.parentKeySerialNum
-/////////////////////////////////////////////////////////////////////
-// get the certCA from chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// get the certCA from pubilc ledger 
+	/////////////////////////////////////////////////////////////////////
 	certCAbytes, err1 := stub.GetState(Serialstring0)
 	if err1 != nil {
 		return shim.Error(err1.Error())
@@ -1242,19 +1160,18 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The all Verify time is ",elapsedTime)
 	return shim.Success([]byte("The Verify successfully !!!" ))
-}
+	}
 
-
-/////////////////////////////////////////////////////////////////////
-// Revoke one certificate based on a given
-// seial number
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Revoke one certificate based on a given
+	// seial number
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
-	// verify identity of the listener
+	// verify identity of the CA
 	creator := GetCreator(stub)
 	if creator == "" {
 		return shim.Error("The operator of Getcreator is failed!")
@@ -1274,9 +1191,9 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	fmt.Println(" password correct")
 	certbytes := encertbytes[1]
 	cert,_ :=unmarshalCert(certbytes)
-/////////////////////////////////////////////////////////////////////
-// Revoked the cert
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Revoke the cert
+	/////////////////////////////////////////////////////////////////////
 	revokedcert,reason := RevokeCert(cert)
 	if reason != "right"{
 		return shim.Error(reason)
@@ -1287,9 +1204,9 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	certBytes_NoPrivKey,_ := marshalCert_NoPrivKey(revokedcert)
 	pwbytes := []byte(pwcert)
 	revokedcombinecertbytes := bytes.Join([][]byte{pwbytes,certbytes}, []byte(";;;"))
-/////////////////////////////////////////////////////////////////////
-// Put the revoked cert on chain 
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Put the revoked cert on chain 
+	/////////////////////////////////////////////////////////////////////
 	err := stub.PutState(Serialstring, certBytes_NoPrivKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1297,12 +1214,12 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The revoke time is ",elapsedTime)
 	return shim.Success(revokedcombinecertbytes)
-}
+	}
 
-/////////////////////////////////////////////////////////////////////
-// Query one certificate based on a given
-// serial number
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Query one certificate based on a given
+	// serial number
+	/////////////////////////////////////////////////////////////////////
 func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
 	if len(args) != 1 {
@@ -1314,9 +1231,9 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		return shim.Error(err1.Error())
 	}
 	cert,_ :=unmarshalCert_NoPrivKey(combinecertbytes)
-/////////////////////////////////////////////////////////////////////
-// Verify the cert and parent certs Whether are revoked
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Verify the cert and parent certs whether are revoked
+	/////////////////////////////////////////////////////////////////////
 	if cert.isKeyEncap == true {
 	certKE := cert
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
@@ -1377,9 +1294,6 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	fmt.Println("The query time is ",elapsedTime)
 	return shim.Error("query failed")
 }
-
-
-	
 
 func main() {
 	layout="Mon Jan 2 15:04:05 -0700 MST 2006"

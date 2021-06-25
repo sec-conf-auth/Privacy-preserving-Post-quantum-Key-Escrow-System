@@ -31,7 +31,9 @@ import (
 
 	
 )
-
+/////////////////////////////////////////////////////////////////////
+// Channel related information for the client
+/////////////////////////////////////////////////////////////////////
 var (
         cc          = "PqCa"
         user        = "Admin" 
@@ -73,9 +75,7 @@ type Cert struct {
 	keyUsage 			x509.KeyUsage
 	sigName_pq			string
 	sig_pq				[]byte
-///////////////////////////////////
-//	alpubKey  	 		interface{}
-///////////////////////////////////
+
 
 	algName_pq			string
 	privateKey_pq_PEM 		[]byte
@@ -627,6 +627,10 @@ func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Passw
 	if err != nil {
 	fmt.Println(err);
 	}
+/////////////////////////////////////////////////////////////////////
+// Get the certificate with the private key from the database
+// and Transfer to the channel
+/////////////////////////////////////////////////////////////////////
 	combinecertCAstring := Query(db,certCASerial)
 	certID_Args := [][]byte{[]byte(Sig_alg), []byte(Password_CA), []byte(Password_ID), 
 				[]byte(combinecertCAstring), []byte(Country), []byte(Organization),
@@ -637,7 +641,7 @@ func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Passw
 		ChaincodeID: cc,
 		Fcn:		"Gen_CertID",
 		Args:		certID_Args,
-	},channel.WithTargetEndpoints("peer0.org0.example.com"))
+	},channel.WithTargetEndpoints("peer0.org0.example.com"))//call the peer0.org0.example.com
 
 	if err != nil {
 		fmt.Printf("Failed to certID: %+v\n", err)
@@ -736,6 +740,9 @@ func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
 	encoding := base64.StdEncoding.EncodeToString(commsg)
 	Serialstring := Serial.String()
 	fmt.Println("the cert which has been roveked serial = %s \n",Serialstring)
+/////////////////////////////////////////////////////////////////////
+// Update database to consistent with the cert on  chain
+/////////////////////////////////////////////////////////////////////
 	Update(db,User{Serialstring,encoding})
 	Updateuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)

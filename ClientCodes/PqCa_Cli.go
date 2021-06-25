@@ -33,7 +33,7 @@ import (
 )
 
 var (
-        cc          = "pqca"
+        cc          = "PqCa"
         user        = "Admin" 
         secret      = ""
         channelName = "mychannel"
@@ -496,6 +496,9 @@ func Updateuser(db *sql.DB,u1 User){
 
 func main(){
 	startTime := time.Now()
+/////////////////////////////////////////////////////////////////////
+// Read the configuration file
+/////////////////////////////////////////////////////////////////////
 	c := config.FromFile("./connection-profile.yaml")
 	sdk, err := fabsdk.New(c)
 	if err != nil {
@@ -503,6 +506,9 @@ func main(){
 		os.Exit(1)
 	}
 	defer sdk.Close()
+/////////////////////////////////////////////////////////////////////
+// Establish a connection with the channel
+/////////////////////////////////////////////////////////////////////
 	clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user), fabsdk.WithOrg(orgName))
 	if err != nil {
 		fmt.Printf("Failed to create channel [%s] client: %#v", channelName, err)
@@ -573,14 +579,18 @@ func main(){
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The query time is ",elapsedTime)	
 }
-
+/////////////////////////////////////////////////////////////////////
+// Here are the fuctions which invoke fuctions of Chaincode
+/////////////////////////////////////////////////////////////////////
 //1---certCA
 func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country string, Organization string,
 OrganizationUnit string, Locality string, Province string, StreetAddress string, PostalCode string, CommonName string) {
 	certCA_Args := [][]byte{[]byte(Sig_alg), []byte(Password), []byte(Country), []byte(Organization), 
 				[]byte(OrganizationUnit), []byte(Locality),[]byte(Province), 
 				[]byte(StreetAddress), []byte(PostalCode), []byte(CommonName)}
-
+/////////////////////////////////////////////////////////////////////
+// Invoke the Chaincode PqCa
+/////////////////////////////////////////////////////////////////////
 	response, err := client.Execute(channel.Request{
 		ChaincodeID: cc,
 		Fcn:         "Gen_CertCA",
@@ -602,6 +612,9 @@ OrganizationUnit string, Locality string, Province string, StreetAddress string,
 	encoding := base64.StdEncoding.EncodeToString(commsg)
 	Serialstring := Serial.String()
 	fmt.Println("certCA serial =\n",Serialstring)
+/////////////////////////////////////////////////////////////////////
+// Store the certificate with the private key in the database
+/////////////////////////////////////////////////////////////////////
 	Insert(db,User{Serialstring,encoding})
 	Insertuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)

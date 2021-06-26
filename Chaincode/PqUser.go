@@ -359,7 +359,7 @@ func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
 		return nil,  nil, err
 	}
 	/////////////////////////////////////////////////////////////////////
-	// sessionkey is used to be encapsulated by PQ key Encapsulatioon
+	// Sessionkey is used to be encapsulated by PQ key Encapsulatioon
 	/////////////////////////////////////////////////////////////////////
 	fmt.Println("\nThe details of the KEM algorithm is:\n", kemer.Details().String())
 
@@ -374,7 +374,7 @@ func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
 func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)([]byte, error){
 
 	/////////////////////////////////////////////////////////////////////
-	// Decode the PQ private key from PEM in the given certKE
+	//Decode the PQ private key from PEM in the given certKE
 	//in order to decapsulate sessionKey
 	/////////////////////////////////////////////////////////////////////
 	passKE := []byte(pwKE)

@@ -27,9 +27,6 @@ import (
 //	"encoding/hex"
 //	"encoding/json"
 //	"encoding/asn1"
-
-
-	
 )
 	/////////////////////////////////////////////////////////////////////
 	// Channel related information for the client
@@ -42,8 +39,6 @@ var (
         lvl         = logging.INFO
         orgName     = "Org0MSP"
 )
-
-
 
 var rootCASerial *big.Int
 var clk clock
@@ -75,7 +70,6 @@ type Cert struct {
 	keyUsage 			x509.KeyUsage
 	sigName_pq			string
 	sig_pq				[]byte
-
 
 	algName_pq			string
 	privateKey_pq_PEM 		[]byte
@@ -245,7 +239,6 @@ func marshalCert(crt *Cert)([]byte, error){
 	if err != nil {
 		return nil, fmt.Errorf("%s: can't gob-encode cert: %s", sn, err)
 	}
-
 	return b.Bytes(), nil
 }
 
@@ -280,14 +273,12 @@ func marshalCert_NoPrivKey(crt *Cert_NoPrivKey)([]byte, error){
 		IsCA:				crt.isCA,
 		IsRevoked:			crt.isRevoked,
 	}
-
 	var b bytes.Buffer
 	g := gob.NewEncoder(&b)
 	err := g.Encode(cg)
 	if err != nil {
 		return nil, fmt.Errorf("%s: can't gob-encode cert: %s", sn, err)
 	}
-
 	return b.Bytes(), nil
 }
 
@@ -334,13 +325,11 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
 
 func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	var cg certgob
-	
 	b := bytes.NewBuffer(crtBytes)
 	g := gob.NewDecoder(b)
 	err := g.Decode(&cg)
@@ -380,7 +369,6 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
 
@@ -403,7 +391,7 @@ func Query(db *sql.DB,key string)string {
 		}
 	}
 	return cert
-	}
+}
 
 func QueryUser(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from user where Serial= ?",key)
@@ -421,7 +409,7 @@ func QueryUser(db *sql.DB,key string)string {
 		}
 	}
 	return cert
-	}
+}
 
 type User struct {
 	Serial 	string 
@@ -584,7 +572,7 @@ func main(){
 	}		
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The query time is ",elapsedTime)	
-	}
+}
 
 	/////////////////////////////////////////////////////////////////////
 	//  Here are the fuctions which invoke the corresponding chaincode APIs
@@ -624,7 +612,7 @@ func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country 
 	Insert(db,User{Serialstring,encoding})
 	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-	}
+}
 
 	//2---certID
 func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Password_ID string, certCASerial string, Country string, Organization string, OrganizationUnit string, Locality string, Province string, StreetAddress string, PostalCode string, CommonName string) {
@@ -666,7 +654,7 @@ func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Passw
 	Insert(db,User{Serialstring,encoding})
 	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-	}
+}
 
 	//3---certKE
 func certKE_CC(client *channel.Client, Chg_sig string, Password_ID string, Password_KE string, certIDSerial string) {
@@ -700,7 +688,7 @@ func certKE_CC(client *channel.Client, Chg_sig string, Password_ID string, Passw
 	Insert(db,User{Serialstring,encoding})
 	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-	}
+}
 
 	//4---verify
 func verify_CC(client *channel.Client, newValue string) {

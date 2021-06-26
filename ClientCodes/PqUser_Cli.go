@@ -38,7 +38,7 @@ var (
         channelName = "mychannel"
         lvl         = logging.INFO
         orgName     = "Org1MSP"
-)
+	)
 
 	/////////////////////////////////////////////////////////////////////
 	// The client codes for user to query its private database
@@ -65,7 +65,7 @@ func QueryUser(db *sql.DB,key string)string {
 type User struct {
 	Serial 	string 
 	Cert 	string
-}
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	// The client codes for user to insert its private database
@@ -85,7 +85,7 @@ func InsertUser(db *sql.DB,u1 User){
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
  
-}
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	// The client codes for user to update its private database
@@ -105,7 +105,7 @@ func UpdateUser(db *sql.DB,u1 User){
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
  
-}
+	}
 
 func main(){
 	startTime := time.Now()
@@ -181,7 +181,7 @@ func verify_CC(client *channel.Client, newValue string) {
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
-}
+	}
 
 	//2---Encap
 func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
@@ -199,7 +199,7 @@ func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
-}
+	}
 
 	//3---Decap
 func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string, ID_Encap string) {
@@ -220,7 +220,7 @@ func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string,
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
-}
+	}
 
 //4---Query_Cert
 func query_CC(client *channel.Client, name string){
@@ -238,4 +238,4 @@ func query_CC(client *channel.Client, name string){
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
         //return ret
-}
+	}

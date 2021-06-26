@@ -747,7 +747,7 @@ func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
 	// Update database to consistent with the cert on  chain
 	/////////////////////////////////////////////////////////////////////
 	Update(db,User{Serialstring,encoding})
-	Updateuser(db,User{Serialstring,encoding})
+	UpdateUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)	
 }
 

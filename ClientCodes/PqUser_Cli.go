@@ -178,7 +178,6 @@ func verify_CC(client *channel.Client, newValue string) {
 	//2---Encap
 func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	encapArgs := [][]byte{[]byte(MyID_KE), []byte(OpID_KE)}
- 
 	response, err := client.Execute(channel.Request{
 		ChaincodeID: cc,
 		Fcn:         "Encap",
@@ -199,7 +198,7 @@ func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string,
 	if err != nil {
 	fmt.Println(err);
 	}
-	combinecertKEstring := Queryuser(db,certKESerial)
+	combinecertKEstring := QueryUser(db,certKESerial)
 	decapArgs := [][]byte{[]byte(MyPassword_KE), []byte(combinecertKEstring), []byte(ID_Encap)}
 	response, err := client.Query(channel.Request{
 		ChaincodeID: cc,

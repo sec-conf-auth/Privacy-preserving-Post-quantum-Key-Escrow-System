@@ -746,7 +746,6 @@ func VerifyCertChain(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey, certKE *Cer
 	elapsedTime2 := time.Since(startTime2)
 	fmt.Println("The certKE and certID Verify time is ",elapsedTime2)
 	return true, "Verification on the cert chain succeeds"
-
 }
 
 func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
@@ -839,7 +838,7 @@ func VerifyCertChain_TwoLayers(certCA *Cert_NoPrivKey, certID *Cert_NoPrivKey)(b
 	/////////////////////////////////////////////////////////////////////
 	// Verify the certCA  whether it is revoked
 	/////////////////////////////////////////////////////////////////////
-func VerifyCertChain_OneLayers(certCA *Cert_NoPrivKey)(bool, string){
+func VerifyCertChain_OneLayer(certCA *Cert_NoPrivKey)(bool, string){
 	if certCA.isRevoked == true {
 		return false, "The CA cert has been revoked"
 	}
@@ -1254,7 +1253,7 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	}
 	certCA,_ :=unmarshalCert_NoPrivKey(certCAbytes)
 	fmt.Printf("\n===== The type of certCA is: %T =====\n", certCA)
-	isVerified, wrong := VerifyCertChainisrevoked_threelayers(certCA, certID, certKE)
+	isVerified, wrong := VerifyCertChain_ThreeLayers(certCA, certID, certKE)
 	if isVerified != true {		
 		return shim.Error(wrong)
 		//panic(err)
@@ -1273,7 +1272,7 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	}
 	certCA,_ :=unmarshalCert_NoPrivKey(certCAbytes)
 	fmt.Printf("\n===== The type of certCA is: %T =====\n", certCA)
-	isVerified, wrong := VerifyCertChainisrevoked_twolayers(certCA, certID)
+	isVerified, wrong := VerifyCertChain_TwoLayers(certCA, certID)
 	if isVerified != true {		
 		return shim.Error(wrong)
 		//panic(err)
@@ -1284,7 +1283,7 @@ func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	}
 	if cert.isCA == true{
 	certCA := cert
-	isVerified, wrong := VerifyCertChainisrevoked_onelayers(certCA)
+	isVerified, wrong := VerifyCertChain_OneLayer(certCA)
 	if isVerified != true {		
 		return shim.Error(wrong)
 		//panic(err)

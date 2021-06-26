@@ -482,7 +482,6 @@ func Update(db *sql.DB,u1 User){
 	}
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
- 
 }
 
 func UpdateUser(db *sql.DB,u1 User){
@@ -596,7 +595,7 @@ func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country 
 				[]byte(OrganizationUnit), []byte(Locality),[]byte(Province), 
 				[]byte(StreetAddress), []byte(PostalCode), []byte(CommonName)}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the Chaincode PqCa
+	// Invoke the chaincode PqCa
 	/////////////////////////////////////////////////////////////////////
 	response, err := client.Execute(channel.Request{
 		ChaincodeID: cc,

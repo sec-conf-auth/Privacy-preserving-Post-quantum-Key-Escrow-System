@@ -206,7 +206,6 @@ func randSerial() *big.Int {
 	panic("can't gen new CA serial")
 }
 
-
 func marshalCert(crt *Cert)([]byte, error){
 	sn := crt.subject.CommonName
 	NotBeforestring:=crt.notBefore.Format(layout)
@@ -338,6 +337,7 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 
 	return crt, nil
 }
+
 func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	var cg certgob
 	
@@ -383,9 +383,10 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 
 	return crt, nil
 }
-/////////////////////////////////////////////////////////////////////
-// Use Go language to operate  databases
-/////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for CA adminitrator (user) to query its private database
+	/////////////////////////////////////////////////////////////////////
 func Query(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from ca where Serial= ?",key)
 	if err!=nil{
@@ -404,7 +405,7 @@ func Query(db *sql.DB,key string)string {
 	return cert
 	}
 
-func Queryuser(db *sql.DB,key string)string {
+func QueryUser(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from user where Serial= ?",key)
 	if err!=nil{
 		fmt.Println("db.Query error:",err)
@@ -421,11 +422,15 @@ func Queryuser(db *sql.DB,key string)string {
 	}
 	return cert
 	}
+
 type User struct {
 	Serial 	string 
 	Cert 	string
 }
 
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for CA adminitrator (user) to insert its private database
+	/////////////////////////////////////////////////////////////////////
 func Insert(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("insert into ca (Serial,Cert) values (?,?)")
 	defer stmt.Close()
@@ -443,7 +448,7 @@ func Insert(db *sql.DB,u1 User){
  
 }
 
-func Insertuser(db *sql.DB,u1 User){
+func InsertUser(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("insert into user (Serial,Cert) values (?,?)")
 	defer stmt.Close()
 	if pError!=nil{
@@ -460,6 +465,9 @@ func Insertuser(db *sql.DB,u1 User){
  
 }
 
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for CA adminitrator (user) to update its private database
+	/////////////////////////////////////////////////////////////////////
 func Update(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("update ca set Serial=?,Cert=?")
 	defer stmt.Close()
@@ -477,7 +485,7 @@ func Update(db *sql.DB,u1 User){
  
 }
 
-func Updateuser(db *sql.DB,u1 User){
+func UpdateUser(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("update user set Serial=?,Cert=?")
 	defer stmt.Close()
 	if pError!=nil{
@@ -496,9 +504,9 @@ func Updateuser(db *sql.DB,u1 User){
 
 func main(){
 	startTime := time.Now()
-/////////////////////////////////////////////////////////////////////
-// Read the configuration file
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Read the configuration file
+	/////////////////////////////////////////////////////////////////////
 	c := config.FromFile("./connection-profile.yaml")
 	sdk, err := fabsdk.New(c)
 	if err != nil {
@@ -506,9 +514,9 @@ func main(){
 		os.Exit(1)
 	}
 	defer sdk.Close()
-/////////////////////////////////////////////////////////////////////
-// Establish a connection with the channel
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Establish a connection with the channel
+	/////////////////////////////////////////////////////////////////////
 	clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user), fabsdk.WithOrg(orgName))
 	if err != nil {
 		fmt.Printf("Failed to create channel [%s] client: %#v", channelName, err)
@@ -550,7 +558,7 @@ func main(){
 		CommonName := args[13]
 		certID_CC(client , Sig_alg , Password_CA , Password_ID , certCASerial , Country , Organization , OrganizationUnit , Locality , Province , StreetAddress , PostalCode , CommonName )
 				
-}
+	}
 	if num =="Gen_CertKE"{		
 		Chg_sig := args[2]
 		Password_ID  := args[3]
@@ -558,39 +566,38 @@ func main(){
 		certIDSerial := args[5]
 		certKE_CC(client, Chg_sig, Password_ID, Password_KE, certIDSerial)
 				
-}
+	}
 	if num =="Verify_Cert"{		
 		newValue := args[2]
 		verify_CC(client, newValue )
 				
-}
+	}
 	
 	if num =="Revoke_Cert"{		
 		Password_Cert := args[2]
 		ID_Cert := args[3]
 		revoke_CC(client, Password_Cert, ID_Cert )
-				
-}		
+	}		
 	if num =="Query_Cert"{		
 		name := args[2]
 		query_CC(client, name)
 				
-}		
+	}		
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The query time is ",elapsedTime)	
-}
-/////////////////////////////////////////////////////////////////////
-// Here are the fuctions which invoke fuctions of Chaincode
-/////////////////////////////////////////////////////////////////////
-//1---certCA
-func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country string, Organization string,
-OrganizationUnit string, Locality string, Province string, StreetAddress string, PostalCode string, CommonName string) {
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//  Here are the fuctions which invoke the corresponding chaincode APIs
+	/////////////////////////////////////////////////////////////////////
+	//1---certCA
+func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country string, Organization string,OrganizationUnit string, Locality string, Province string, StreetAddress string, PostalCode string, CommonName string) {
 	certCA_Args := [][]byte{[]byte(Sig_alg), []byte(Password), []byte(Country), []byte(Organization), 
 				[]byte(OrganizationUnit), []byte(Locality),[]byte(Province), 
 				[]byte(StreetAddress), []byte(PostalCode), []byte(CommonName)}
-/////////////////////////////////////////////////////////////////////
-// Invoke the Chaincode PqCa
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Invoke the Chaincode PqCa
+	/////////////////////////////////////////////////////////////////////
 	response, err := client.Execute(channel.Request{
 		ChaincodeID: cc,
 		Fcn:         "Gen_CertCA",
@@ -612,25 +619,24 @@ OrganizationUnit string, Locality string, Province string, StreetAddress string,
 	encoding := base64.StdEncoding.EncodeToString(commsg)
 	Serialstring := Serial.String()
 	fmt.Println("certCA serial =\n",Serialstring)
-/////////////////////////////////////////////////////////////////////
-// Store the certificate with the private key in the database
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Store the certificate with the private key in the database
+	/////////////////////////////////////////////////////////////////////
 	Insert(db,User{Serialstring,encoding})
 	Insertuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-}
+	}
 
-
-//2---certID
+	//2---certID
 func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Password_ID string, certCASerial string, Country string, Organization string, OrganizationUnit string, Locality string, Province string, StreetAddress string, PostalCode string, CommonName string) {
 	db, err := sql.Open("mysql", "root:hzaucoi@tcp(127.0.0.1:3306)/cert?charset=utf8");
 	if err != nil {
 	fmt.Println(err);
 	}
-/////////////////////////////////////////////////////////////////////
-// Get the certificate with the private key from the database
-// and Transfer to the channel
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Get the certificate with the private key from the database
+	// and transfer to the channel
+	/////////////////////////////////////////////////////////////////////
 	combinecertCAstring := Query(db,certCASerial)
 	certID_Args := [][]byte{[]byte(Sig_alg), []byte(Password_CA), []byte(Password_ID), 
 				[]byte(combinecertCAstring), []byte(Country), []byte(Organization),
@@ -661,9 +667,9 @@ func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Passw
 	Insert(db,User{Serialstring,encoding})
 	Insertuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-}
+	}
 
-//3---certKE
+	//3---certKE
 func certKE_CC(client *channel.Client, Chg_sig string, Password_ID string, Password_KE string, certIDSerial string) {
 	db, err := sql.Open("mysql", "root:hzaucoi@tcp(127.0.0.1:3306)/cert?charset=utf8");
 	if err != nil {
@@ -695,9 +701,9 @@ func certKE_CC(client *channel.Client, Chg_sig string, Password_ID string, Passw
 	Insert(db,User{Serialstring,encoding})
 	Insertuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-}
+	}
 
-//4---verify
+	//4---verify
 func verify_CC(client *channel.Client, newValue string) {
 	verifyArgs := [][]byte{[]byte(newValue)}
  
@@ -713,10 +719,10 @@ func verify_CC(client *channel.Client, newValue string) {
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
-}
+	}
 
 
-//5---revoke
+	//5---revoke
 func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
 	db, err := sql.Open("mysql", "root:hzaucoi@tcp(127.0.0.1:3306)/cert?charset=utf8");
 	if err != nil {
@@ -740,16 +746,16 @@ func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
 	encoding := base64.StdEncoding.EncodeToString(commsg)
 	Serialstring := Serial.String()
 	fmt.Println("the cert which has been roveked serial = %s \n",Serialstring)
-/////////////////////////////////////////////////////////////////////
-// Update database to consistent with the cert on  chain
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Update database to consistent with the cert on  chain
+	/////////////////////////////////////////////////////////////////////
 	Update(db,User{Serialstring,encoding})
 	Updateuser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	
 }
 
-//8---query
+	//8---query
 func query_CC(client *channel.Client, name string){
 	queryArgs := [][]byte{[]byte(name)}
 	response, err := client.Query(channel.Request{
@@ -764,5 +770,4 @@ func query_CC(client *channel.Client, name string){
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
-
 }

@@ -27,13 +27,10 @@ import (
 //	"encoding/hex"
 //	"encoding/json"
 //	"encoding/asn1"
-
-
-	
 )
-/////////////////////////////////////////////////////////////////////
-// Channel related information for the client
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Channel related information for the client
+	/////////////////////////////////////////////////////////////////////
 var (
         cc          = "PqUser"
         user        = "Admin" 
@@ -43,30 +40,11 @@ var (
         orgName     = "Org1MSP"
 )
 
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for user to query its private database
+	/////////////////////////////////////////////////////////////////////
 
-
-
-/////////////////////////////////////////////////////////////////////
-// Use Go language to operate  databases
-/////////////////////////////////////////////////////////////////////
-func Query(db *sql.DB,key string)string {
-	rows,err:=db.Query("select * from ca where Serial= ?",key)
-	if err!=nil{
-		fmt.Println("db.Query error:",err)
-		return "db.Query error:"
-	}
- 	var serial string
-		var cert string
-	for rows.Next() {
-		error1 := rows.Scan(&serial, &cert)
-		if error1 != nil {
-			fmt.Println("rows.Scan error:", error1)
-			return "rows.Scan error:"
-		}
-	}
-	return cert
-	}
-func Queryuser(db *sql.DB,key string)string {
+func QueryUser(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from user where Serial= ?",key)
 	if err!=nil{
 		fmt.Println("db.Query error:",err)
@@ -83,28 +61,16 @@ func Queryuser(db *sql.DB,key string)string {
 	}
 	return cert
 	}
+
 type User struct {
 	Serial 	string 
 	Cert 	string
 }
 
-func Insert(db *sql.DB,u1 User){
-	stmt,pError:=db.Prepare("insert into ca (Serial,Cert) values (?,?)")
-	defer stmt.Close()
-	if pError!=nil{
-		fmt.Println("db.Prepare error:",pError)
-		return
-	}
-	res,error:=stmt.Exec(u1.Serial,u1.Cert)
-	if error!=nil{
-		fmt.Println("stmt.Exec error:",error)
-		return
-	}
-	flag,_:=res.RowsAffected()
-	fmt.Println("Affected lines:",flag)
- 
-}
-func Insertuser(db *sql.DB,u1 User){
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for user to insert its private database
+	/////////////////////////////////////////////////////////////////////
+func InsertUser(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("insert into user (Serial,Cert) values (?,?)")
 	defer stmt.Close()
 	if pError!=nil{
@@ -120,23 +86,11 @@ func Insertuser(db *sql.DB,u1 User){
 	fmt.Println("Affected lines:",flag)
  
 }
-func Update(db *sql.DB,u1 User){
-	stmt,pError:=db.Prepare("update ca set Serial=?,Cert=?")
-	defer stmt.Close()
-	if pError!=nil{
-		fmt.Println("db.Prepare error:",pError)
-		return
-	}
-	res,error:=stmt.Exec(u1.Serial,u1.Cert)
-	if error!=nil{
-		fmt.Println("stmt.Exec error:",error)
-		return
-	}
-	flag,_:=res.RowsAffected()
-	fmt.Println("Affected lines:",flag)
- 
-}
-func Updateuser(db *sql.DB,u1 User){
+
+	/////////////////////////////////////////////////////////////////////
+	// The client codes for user to update its private database
+	/////////////////////////////////////////////////////////////////////
+func UpdateUser(db *sql.DB,u1 User){
 	stmt,pError:=db.Prepare("update user set Serial=?,Cert=?")
 	defer stmt.Close()
 	if pError!=nil{
@@ -155,6 +109,9 @@ func Updateuser(db *sql.DB,u1 User){
 
 func main(){
 	startTime := time.Now()
+	/////////////////////////////////////////////////////////////////////
+	// Read the configuration file
+	/////////////////////////////////////////////////////////////////////
 	c := config.FromFile("./connection-profile.yaml")
 	sdk, err := fabsdk.New(c)
 	if err != nil {
@@ -162,21 +119,23 @@ func main(){
 		os.Exit(1)
 	}
 	defer sdk.Close()
+	/////////////////////////////////////////////////////////////////////
+	// Establish a connection with the channel
+	/////////////////////////////////////////////////////////////////////
 	clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user), fabsdk.WithOrg(orgName))
 	if err != nil {
 		fmt.Printf("Failed to create channel [%s] client: %#v", channelName, err)
 		os.Exit(1)
 	}
- 
 	client, err := channel.New(clientChannelContext)
 	if err != nil {
 		fmt.Printf("Failed to create channel [%s]:", channelName, err)
 	}
 	args := os.Args
 	num :=args[1]
-/////////////////////////////////////////////////////////////////////
-// hoose the function of Chaincode
-/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Choose the function of Chaincode
+	/////////////////////////////////////////////////////////////////////
 	if num =="Verify_Cert"{		
 		newValue := args[2]
 		verify_CC(client, newValue )
@@ -205,8 +164,10 @@ func main(){
 	}
 
 
-
-//1---Verify_Cert
+	/////////////////////////////////////////////////////////////////////
+	// Here are the fuctions which invoke the corresponding chaincode APIs
+	/////////////////////////////////////////////////////////////////////
+	//1---Verify_Cert
 func verify_CC(client *channel.Client, newValue string) {
 	verifyArgs := [][]byte{[]byte(newValue)}
 	response, err := client.Query(channel.Request{
@@ -222,7 +183,7 @@ func verify_CC(client *channel.Client, newValue string) {
 	fmt.Println("Payload: ", ret)
 }
 
-//2---Encap
+	//2---Encap
 func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	encapArgs := [][]byte{[]byte(MyID_KE), []byte(OpID_KE)}
  
@@ -240,7 +201,7 @@ func encap_CC(client *channel.Client, MyID_KE string, OpID_KE string) {
 	fmt.Println("Payload: ", ret)
 }
 
-//3---Decap
+	//3---Decap
 func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string, ID_Encap string) {
 	db, err := sql.Open("mysql", "root:hzaucoi@tcp(127.0.0.1:3306)/cert?charset=utf8");
 	if err != nil {
@@ -260,8 +221,6 @@ func decap_CC(client *channel.Client, MyPassword_KE string, certKESerial string,
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
 }
-
-
 
 //4---Query_Cert
 func query_CC(client *channel.Client, name string){

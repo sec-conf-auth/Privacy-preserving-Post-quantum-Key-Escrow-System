@@ -151,8 +151,6 @@ type certgob_NoPrivKey struct {
 }
 
 // hash publickey; we use it as a salt for encryption and also SubjectKeyId
-
-
 func hash(b []byte) []byte {
 	h := sha256.New()
 	h.Write(b)
@@ -420,7 +418,7 @@ func (t *user) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 	/////////////////////////////////////////////////////////////////////
-	// Invoke chaincode PqCa and verify one
+	// Invoke the chaincode PqCa and verify one
 	// certificate (together with the related
 	// cerificate chain)
 	/////////////////////////////////////////////////////////////////////
@@ -430,7 +428,7 @@ func (t *user) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.R
 	str2 := []byte(Serialstring2)
 	queryArgs := [][]byte{[]byte("Verify_Cert"), str2}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Verify_Cert of chaincode PqCa
+	// Invoke the function Verify_Cert of the chaincode PqCa
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
@@ -455,7 +453,7 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	str1 := []byte(Serialstring0)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Query_Cert of chaincode PqCa to get the cert
+	// Invoke the function Query_Cert of the chaincode PqCa to get the cert
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
@@ -527,9 +525,9 @@ func (t *user) Decap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The decap time is ",elapsedTime)
 	return shim.Success([]byte("decap successfully !!!" ))
-	}
+}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke chaincode PqCa and query one
+	// Invoke the chaincode PqCa and query one
 	// certificate with a given serial number
 	/////////////////////////////////////////////////////////////////////
 func (t *user) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -538,7 +536,7 @@ func (t *user) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	str1 := []byte(Serialstring)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Query_Cert of chaincode PqCa
+	// Invoke the function Query_Cert of the the chaincode PqCa
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {

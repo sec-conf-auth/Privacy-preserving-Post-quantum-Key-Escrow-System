@@ -225,7 +225,6 @@ func query_CC(client *channel.Client, name string){
 	if err != nil {
 		fmt.Println("Failed to query: ", err)
 	}
- 
 	ret := string(response.Payload)
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)

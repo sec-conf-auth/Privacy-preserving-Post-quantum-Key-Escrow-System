@@ -622,7 +622,7 @@ func certCA_CC(client *channel.Client, Sig_alg string, Password string, Country 
 	// Store the certificate with the private key in the database
 	/////////////////////////////////////////////////////////////////////
 	Insert(db,User{Serialstring,encoding})
-	Insertuser(db,User{Serialstring,encoding})
+	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	}
 
@@ -664,7 +664,7 @@ func certID_CC(client *channel.Client, Sig_alg string, Password_CA string, Passw
 	Serialstring := Serial.String()
 	fmt.Println("certID serial =\n",Serialstring)
 	Insert(db,User{Serialstring,encoding})
-	Insertuser(db,User{Serialstring,encoding})
+	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	}
 
@@ -698,14 +698,13 @@ func certKE_CC(client *channel.Client, Chg_sig string, Password_ID string, Passw
 	Serialstring := Serial.String()
 	fmt.Println("certKE serial =\n",Serialstring)
 	Insert(db,User{Serialstring,encoding})
-	Insertuser(db,User{Serialstring,encoding})
+	InsertUser(db,User{Serialstring,encoding})
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	}
 
 	//4---verify
 func verify_CC(client *channel.Client, newValue string) {
 	verifyArgs := [][]byte{[]byte(newValue)}
- 
 	response, err := client.Query(channel.Request{
 		ChaincodeID: cc,
 		Fcn:         "Verify_Cert",
@@ -719,7 +718,6 @@ func verify_CC(client *channel.Client, newValue string) {
 	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
 	fmt.Println("Payload: ", ret)
 	}
-
 
 	//5---revoke
 func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
@@ -750,8 +748,7 @@ func revoke_CC(client *channel.Client, Password_Cert string, ID_Cert string) {
 	/////////////////////////////////////////////////////////////////////
 	Update(db,User{Serialstring,encoding})
 	Updateuser(db,User{Serialstring,encoding})
-	fmt.Println("Chaincode status: ", response.ChaincodeStatus)
-	
+	fmt.Println("Chaincode status: ", response.ChaincodeStatus)	
 }
 
 	//8---query

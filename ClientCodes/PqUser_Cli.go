@@ -83,7 +83,6 @@ func InsertUser(db *sql.DB,u1 User){
 	}
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
- 
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -103,7 +102,6 @@ func UpdateUser(db *sql.DB,u1 User){
 	}
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
- 
 	}
 
 func main(){
@@ -137,31 +135,26 @@ func main(){
 	/////////////////////////////////////////////////////////////////////
 	if num =="Verify_Cert"{		
 		newValue := args[2]
-		verify_CC(client, newValue )
-				
+		verify_CC(client, newValue )		
 	}
 	if num =="Encap"{		
 		MyID_KE := args[2]
 		OpID_KE := args[3]
-		encap_CC(client, MyID_KE, OpID_KE)
-				
+		encap_CC(client, MyID_KE, OpID_KE)		
 	}
 	if num =="Decap"{		
 		MyPassword_KE := args[2]
 		certKESerial := args[3]
 		ID_Encap := args[4]
-		decap_CC(client, MyPassword_KE, certKESerial, ID_Encap )
-				
+		decap_CC(client, MyPassword_KE, certKESerial, ID_Encap )		
 	}		
 	if num =="Query_Cert"{		
 		name := args[2]
-		query_CC(client, name)
-				
+		query_CC(client, name)		
 	}		
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The query time is ",elapsedTime)	
 	}
-
 
 	/////////////////////////////////////////////////////////////////////
 	// Here are the fuctions which invoke the corresponding chaincode APIs

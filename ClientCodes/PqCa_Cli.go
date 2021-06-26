@@ -433,7 +433,6 @@ func Insert(db *sql.DB,u1 User){
 	}
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
- 
 }
 
 func InsertUser(db *sql.DB,u1 User){
@@ -450,7 +449,6 @@ func InsertUser(db *sql.DB,u1 User){
 	}
 	flag,_:=res.RowsAffected()
 	fmt.Println("Affected lines:",flag)
- 
 }
 
 	/////////////////////////////////////////////////////////////////////
@@ -527,8 +525,7 @@ func main(){
 		PostalCode := args[10]
 		CommonName := args[11]
 		certCA_CC(client, Sig_alg, Password, Country, Organization,OrganizationUnit, 
-					Locality, Province, StreetAddress, PostalCode, CommonName)
-				
+					Locality, Province, StreetAddress, PostalCode, CommonName)	
 	}
 	if num =="Gen_CertID"{		
 		Sig_alg := args[2]
@@ -551,15 +548,12 @@ func main(){
 		Password_ID  := args[3]
 		Password_KE  := args[4]
 		certIDSerial := args[5]
-		certKE_CC(client, Chg_sig, Password_ID, Password_KE, certIDSerial)
-				
+		certKE_CC(client, Chg_sig, Password_ID, Password_KE, certIDSerial)		
 	}
 	if num =="Verify_Cert"{		
 		newValue := args[2]
-		verify_CC(client, newValue )
-				
+		verify_CC(client, newValue )		
 	}
-	
 	if num =="Revoke_Cert"{		
 		Password_Cert := args[2]
 		ID_Cert := args[3]
@@ -567,8 +561,7 @@ func main(){
 	}		
 	if num =="Query_Cert"{		
 		name := args[2]
-		query_CC(client, name)
-				
+		query_CC(client, name)		
 	}		
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The query time is ",elapsedTime)	

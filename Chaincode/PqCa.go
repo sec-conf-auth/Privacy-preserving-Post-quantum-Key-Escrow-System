@@ -296,7 +296,6 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		// SerialNumber: 		        "CN",
 		CommonName: 			cg.CommonName,
 	}
-
 	NotBefore,_:=time.Parse(layout,cg.NotBefore)
 	NotAfter,_:=time.Parse(layout,cg.NotAfter)
 	SerialNumber,_:=new(big.Int).SetString(cg.SerialNumber,10)
@@ -968,7 +967,7 @@ func (t *ca) Gen_CertCA(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	fmt.Println("The certCA time is ",elapsedTime)
 	CAserial = true
 	return shim.Success(combinecertCAbytes)
-	}
+}
 
 	/////////////////////////////////////////////////////////////////////
 	// Generate the key pair and ID certificate (signed by the CA) for each user
@@ -1116,7 +1115,7 @@ func (t *ca) Gen_CertKE(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The certKE time is ",elapsedTime)
 		return shim.Success(combinecertKEbytes)
-	}
+}
 
 	/////////////////////////////////////////////////////////////////////
 	// Verify one certificate and its parent
@@ -1166,7 +1165,7 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The all Verify time is ",elapsedTime)
 	return shim.Success([]byte("The Verify successfully !!!" ))
-	}
+}
 
 	/////////////////////////////////////////////////////////////////////
 	// Revoke one certificate based on a given seial number
@@ -1219,7 +1218,7 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The revoke time is ",elapsedTime)
 	return shim.Success(revokedcombinecertbytes)
-	}
+}
 
 	/////////////////////////////////////////////////////////////////////
 	// Query one certificate based on a given serial number

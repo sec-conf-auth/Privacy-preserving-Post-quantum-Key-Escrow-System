@@ -22,8 +22,6 @@ import (
 	"time"
 	_"encoding/pem"
 	"encoding/gob"
-	
- 
 //	"encoding/hex"
 //	"encoding/json"
 //	"encoding/asn1"
@@ -172,8 +170,6 @@ type certgob_NoPrivKey struct {
 }
 
 // hash publickey; we use it as a salt for encryption and also SubjectKeyId
-
-
 func hash(b []byte) []byte {
 	h := sha256.New()
 	h.Write(b)

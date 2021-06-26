@@ -382,7 +382,6 @@ func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)
 	privateKey_pq_KE, _ := x509.DecryptPEMBlock(privateKey_pq_PEMBlock_KE, passKE)
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
-
 	if err := kemer.Init(certKE.algName_pq, privateKey_pq_KE); err != nil {
 		log.Fatal(err)
 		return nil, err
@@ -526,6 +525,7 @@ func (t *user) Decap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	fmt.Println("The decap time is ",elapsedTime)
 	return shim.Success([]byte("decap successfully !!!" ))
 }
+
 	/////////////////////////////////////////////////////////////////////
 	// Invoke the chaincode PqCa and query one
 	// certificate with a given serial number

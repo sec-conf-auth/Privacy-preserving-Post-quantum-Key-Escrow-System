@@ -250,7 +250,6 @@ func marshalCert_NoPrivKey(crt *Cert)([]byte, error){
 		IsCA:				crt.isCA,
 		IsRevoked:			crt.isRevoked,
 	}
-
 	var b bytes.Buffer
 	g := gob.NewEncoder(&b)
 	err := g.Encode(cg)
@@ -281,7 +280,6 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		// SerialNumber: 		        "CN",
 		CommonName: 			cg.CommonName,
 	}
-
 	NotBefore,_:=time.Parse(layout,cg.NotBefore)
 	NotAfter,_:=time.Parse(layout,cg.NotAfter)
 	SerialNumber,_:=new(big.Int).SetString(cg.SerialNumber,10)
@@ -306,7 +304,6 @@ func unmarshalCert(crtBytes []byte)(*Cert, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
 
@@ -352,7 +349,6 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 		isCA:				cg.IsCA,
 		isRevoked:			cg.IsRevoked,
 	}
-
 	return crt, nil
 }
 
@@ -360,7 +356,6 @@ func GenEncapUploadSessionKey(certKE *Cert_NoPrivKey)([]byte,  []byte, error){
 	kemName := certKE.algName_pq
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
-
 	if err := kemer.Init(kemName, nil); err != nil {
 		log.Fatal(err)
 		return nil,  nil, err
@@ -401,15 +396,12 @@ func DownloadDecapSessionKey(encapSessionKey []byte,  certKE *Cert, pwKE string)
 	}
 	fmt.Printf("\nsessionKey in DecapSecret [length=%d]:\n", len(sessionKey))
 	return sessionKey, nil
-
-
 }
 
 type user struct{}
 
 func (t *user) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("begin to init chaincode....")
-
    return shim.Success([]byte("Success invoke and not opter!!"))
 }
 
@@ -429,7 +421,7 @@ func (t *user) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	/////////////////////////////////////////////////////////////////////
 	// Invoke chaincode PqCa and verify one
-	// certificate(together with the related
+	// certificate (together with the related
 	// cerificate chain)
 	/////////////////////////////////////////////////////////////////////
 func (t *user) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -438,7 +430,7 @@ func (t *user) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.R
 	str2 := []byte(Serialstring2)
 	queryArgs := [][]byte{[]byte("Verify_Cert"), str2}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Verify_Cert of PqCa Chaincode
+	// Invoke the function Verify_Cert of chaincode PqCa
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
@@ -463,8 +455,7 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	str1 := []byte(Serialstring0)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Query_Cert of PqCa Chaincode
-	// to get the cert
+	// Invoke the function Query_Cert of chaincode PqCa to get the cert
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
@@ -480,7 +471,6 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	if errs != nil {
 		fmt.Println("\nGenEncapUploadSessionKey fails: ", errs)
 	}
-
 	fmt.Printf("\n===== The length of encSessionKey is: %d =====\n", len(encapSessionKey))
 	fmt.Printf("\n===== The length of sessionKey is: %d =====\n", len(sessionKey))
 	Serialstring := Serialstring1 + Serialstring0
@@ -492,7 +482,6 @@ func (t *user) Encap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-
 	elapsedTime := time.Since(startTime)
 	fmt.Println("The encap time is ",elapsedTime)
 	return shim.Success([]byte("encap successfully !!!---------combineserial:"+ Serialstring))
@@ -539,7 +528,6 @@ func (t *user) Decap(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	fmt.Println("The decap time is ",elapsedTime)
 	return shim.Success([]byte("decap successfully !!!" ))
 	}
-
 	/////////////////////////////////////////////////////////////////////
 	// Invoke chaincode PqCa and query one
 	// certificate with a given serial number
@@ -550,7 +538,7 @@ func (t *user) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	str1 := []byte(Serialstring)
 	queryArgs := [][]byte{[]byte("Query_Cert"), str1}
 	/////////////////////////////////////////////////////////////////////
-	// Invoke the function Query_Cert of PqCa Chaincode
+	// Invoke the function Query_Cert of chaincode PqCa
 	/////////////////////////////////////////////////////////////////////
 	response := stub.InvokeChaincode("PqCa", queryArgs, "mychannel")
 	if response.Status != shim.OK {
@@ -561,7 +549,6 @@ func (t *user) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Re
 	fmt.Println("The query time is ",elapsedTime)
 	return shim.Success([]byte("The query successfully !!!" ))
 }
-
 
 func main() {
 	layout="Mon Jan 2 15:04:05 -0700 MST 2006"

@@ -43,7 +43,6 @@ var (
 	/////////////////////////////////////////////////////////////////////
 	// The client codes for user to query its private database
 	/////////////////////////////////////////////////////////////////////
-
 func QueryUser(db *sql.DB,key string)string {
 	rows,err:=db.Query("select * from user where Serial= ?",key)
 	if err!=nil{

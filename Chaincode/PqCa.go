@@ -1129,7 +1129,7 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 	Serialstring2 := args[0]
 	/////////////////////////////////////////////////////////////////////
-	// get the certKE from pubilc ledger
+	// Get the certKE from pubilc ledger
 	/////////////////////////////////////////////////////////////////////
 	certKEbytes, err1 := stub.GetState(Serialstring2)
 	if err1 != nil {
@@ -1139,7 +1139,7 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	fmt.Printf("\n===== The type of certKE is: %T =====\n", certKE)
 	Serialstring1 := certKE.parentKeySerialNum
 	/////////////////////////////////////////////////////////////////////
-	// get the certID from pubilc ledger
+	// Get the certID from pubilc ledger
 	/////////////////////////////////////////////////////////////////////
 	certIDbytes, err1 := stub.GetState(Serialstring1)
 	if err1 != nil {
@@ -1149,7 +1149,7 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	fmt.Printf("\n===== The type of certID is: %T =====\n", certID)
 	Serialstring0 := certID.parentKeySerialNum
 	/////////////////////////////////////////////////////////////////////
-	// get the certCA from pubilc ledger 
+	// Get the certCA from pubilc ledger 
 	/////////////////////////////////////////////////////////////////////
 	certCAbytes, err1 := stub.GetState(Serialstring0)
 	if err1 != nil {
@@ -1169,8 +1169,7 @@ func (t *ca) Verify_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 
 	/////////////////////////////////////////////////////////////////////
-	// Revoke one certificate based on a given
-	// seial number
+	// Revoke one certificate based on a given seial number
 	/////////////////////////////////////////////////////////////////////
 func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()
@@ -1223,8 +1222,7 @@ func (t *ca) Revoke_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	}
 
 	/////////////////////////////////////////////////////////////////////
-	// Query one certificate based on a given
-	// serial number
+	// Query one certificate based on a given serial number
 	/////////////////////////////////////////////////////////////////////
 func (t *ca) Query_Cert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	startTime := time.Now()

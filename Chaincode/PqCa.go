@@ -168,7 +168,6 @@ type certgob_NoPrivKey struct {
 
 // hash publickey; we use it as a salt for encryption and also SubjectKeyId
 
-
 func hash(b []byte) []byte {
 	h := sha256.New()
 	h.Write(b)
@@ -367,6 +366,7 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	}
 	return crt, nil
 }
+
 	//////////////////////////////////////////////////////////////////
 	// create the CA
 	//////////////////////////////////////////////////////////////////
@@ -374,7 +374,6 @@ func unmarshalCert_NoPrivKey(crtBytes []byte)(*Cert_NoPrivKey, error){
 	// Before creating the CA, the validity check of CA should be performed.
 	// One should check whether the CA certificate is revoked or not.
 	//////////////////////////////////////////////////////////////////
-
 func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, error) {
 
 	rootCASerial = randSerial()
@@ -399,7 +398,6 @@ func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, e
 		return nil, err
 	}
 	privKey_pq_PEM := pem.EncodeToMemory(privKey_pq_PEMBlock)
-
 	//////////////////////////////////////////////////////////////////////////////
 	// Prepare the Time, Issuer and Subject Name
 	//////////////////////////////////////////////////////////////////////////////
@@ -441,7 +439,6 @@ func CreateCA(clk clock, sub *pkix.Name, pw string, sigName_pq string) (*Cert, e
 	return ck, nil
 }
 
-
 func NewSerial(caSerial *big.Int) (*big.Int) {
 	new := big.NewInt(1)
 	caSerial.Add(caSerial, new)
@@ -456,7 +453,6 @@ func NewSerial(caSerial *big.Int) (*big.Int) {
 	// Before the certificate creation, the CA validity check should be performed.
 	// One should check whether the CA certificate is revoked or not.
 	//////////////////////////////////////////////////////////////////
-
 func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID string, sigName_pq string,ParentSerialNum string) (*Cert, error) {
 	serial := NewSerial(rootCASerial)
 	fmt.Printf("\nThe new serial := %d\n", serial)
@@ -546,7 +542,6 @@ func GenerateIDCert(clk clock, certCA *Cert, pwCA string, sub *pkix.Name, pwID s
 	// the CA and ID certificates validity check should be performed.
 	// One should check whether the CA and ID certificates are revoked or not.
 	//////////////////////////////////////////////////////////////////////////////////
-
 func GenerateKeyEncapCert(clk clock, certID *Cert, pwID string, pwKeyEncap string, kemName_pq string,ParentSerialNum string) (*Cert, error) {
 	serial := NewSerial(rootCASerial)
 	fmt.Printf("\nThe new serial := %d\n", serial)

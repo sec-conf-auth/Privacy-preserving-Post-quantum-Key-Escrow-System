@@ -1,5 +1,5 @@
 # PqAuthKEM4Chain
-# About The Function of Chaincodes
+# About the Function of Chaincodes
 The main implementation of the PQ user authentication and key
 exchange system consists of two chaincodes, namely `PqCa` and
 `PqUser`. The `PqCa` chaincode provides
@@ -20,7 +20,7 @@ corresponding certificate and related information (e.g., password)
 are all stored in one line, and the certificate serial number is set as
 the key of the line.
 
-# About The Function of Client Codes
+# About the Function of Client Codes
 Besides the chaincodes, we also develop client codes to help
 developers create their applications based on the PQ user
 authentication and key exchange system. 
@@ -29,7 +29,7 @@ which are written in Go and used to invoke the APIs in the
 corresponding chaincodes. The configuration file (e.g.,`connection-profile.yaml`)for the client
 codes to invoke the chaincodes is also provided.
 
-# About The Use of Docker Image
+# About the Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the
 native Hyperledger Fabric docker image for chaincode execution,
 we build a new docker image integrated with liboqs based on Ubuntu 18.04 and use it as the execution environment of our
@@ -83,9 +83,10 @@ chaincode:
    
 4.Start the fabric network and deploy chaincodes.
  
-# About The Experiment Data
-In our experiments, we choose one PQ signature algorithm and
-one KEM algorithm at the same security level . 
+# About the Experiment Data
+Our experiments involve three VMs on the local server, each one of which is based on Ubuntu 18.04 configured with eight CPU cores of Intel Xeon Gold 6131 throttled to 2.6GHz and 16GB memory, and we deploy one CA peer (for CA administrator) and two user peers (for users Alice and Bob) in one channel separately running on the three VMs. The system is built on Hyperledger Fabric 2.2.3, and the chaincodes together with the client codes are written in Go 1.15.7. 
+
+We divide all the PQ algorithms into three groups, namely level 1~2, level 3, level 4~5, which separately indicate low, medium and high security levels. The specified PQ algorithm names are summarized by groups in Table 1. In our experiments, we choose one PQ signature algorithm and one KEM algorithm in the same security group (i.e., the same line of Table 1).
 
 
 # References

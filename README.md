@@ -87,6 +87,9 @@ chaincode:
 Our experiments involve three VMs on the local server, each one of which is based on Ubuntu 18.04 configured with eight CPU cores of Intel Xeon Gold 6131 throttled to 2.6GHz and 16GB memory, and we deploy one CA peer (for CA administrator) and two user peers (for users Alice and Bob) in one channel separately running on the three VMs. The system is built on Hyperledger Fabric 2.2.3, and the chaincodes together with the client codes are written in Go 1.15.7. 
 
 We divide all the PQ algorithms into three groups, namely level 1-2, level 3, level 4-5, which separately indicate low, medium and high security levels. The specified PQ algorithm names are summarized by groups in Table 1. In our experiments, we choose one PQ signature algorithm and one KEM algorithm in the same security group (i.e., the same line of Table 1).
+
+Table 1:
+
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=311
  style='width:232.9pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext 1.0pt;
  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:1.0pt solid windowtext;

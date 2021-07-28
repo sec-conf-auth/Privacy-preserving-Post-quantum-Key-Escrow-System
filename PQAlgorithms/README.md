@@ -19,193 +19,79 @@ We also summarize the details of all the nine PQ KEM algorithms in Table 2 attac
 
 <table>
    <tr>
-      <td>
-         Alg.
-      </td>
-      <td>
-         Algorithms names
-      </td>
-      <td>
-         Alg.
-      </td>
-      <td>
-         Claimed NIST security level
-      </td>
-      <td>
-         Public key size (bytes)
-      </td>
-      <td>
-         Private key size (bytes)
-      </td>
-      <td>
-         Signature
-      </td>
+      <td>Alg.</td>
+      <td>Algorithms names</td>
+      <td>Alg.</td>
+      <td>Claimed NIST security level</td>
+      <td>Public key size (bytes)</td>
+      <td>Private key size (bytes)</td>
+      <td>Signature</td>
    </tr>
    <tr>
-      <td>
-         types
-      </td>
-      <td>
-         
-      </td>
-      <td>
-         subtypes
-      </td>
-      <td>
-         
-      </td>
-      <td>
-         
-      </td>
-      <td>
-         
-      </td>
-      <td>
-         size (bytes)
-      </td>
+      <td>types</td>
+      <td></td>
+      <td>subtypes</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>size (bytes)</td>
    </tr>
    <tr>
-      <td>
-         Digital signature
-      </td>
-      <td>
-         CRYSTALS-DILITHIUM
-      </td>
-      <td>
-         Lattice-based
-      </td>
-      <td>
-         2, 3, 5
-      </td>
-      <td>
-         1312~2592
-      </td>
-      <td>
-         2528~4864
-      </td>
-      <td>
-         2420~4595
-      </td>
+      <td>Digital signature</td>
+      <td>CRYSTALS-DILITHIUM</td>
+      <td>Lattice-based</td>
+      <td>2, 3, 5</td>
+      <td>1312~2592</td>
+      <td>2528~4864</td>
+      <td>2420~4595</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
-      <td>
-         FALCON
-      </td>
-      <td>
-         Lattice-based
-      </td>
-      <td>
-         1, 5
-      </td>
-      <td>
-         897~1793
-      </td>
-      <td>
-         1281~2305
-      </td>
-      <td>
-         690~1330
-      </td>
+      <td></td>
+      <td>FALCON</td>
+      <td>Lattice-based</td>
+      <td>1, 5</td>
+      <td>897~1793</td>
+      <td>1281~2305</td>
+      <td>690~1330</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
-      <td>
-         Rainbow
-      </td>
-      <td>
-         Multivariate-based
-      </td>
-      <td>
-         1, 3, 5
-      </td>
-      <td>
-         60192~1930600
-      </td>
-      <td>
-         64~1408736
-      </td>
-      <td>
-         66~212
-      </td>
+      <td></td>
+      <td>Rainbow</td>
+      <td>Multivariate-based</td>
+      <td>1, 3, 5</td>
+      <td>60192~1930600</td>
+      <td>64~1408736</td>
+      <td>66~212</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
-      <td>
-         Picnic
-      </td>
-      <td>
-         Hash-based
-      </td>
-      <td>
-         1, 3, 5
-      </td>
-      <td>
-         33~65
-      </td>
-      <td>
-         49~97
-      </td>
-      <td>
-         34036~209510
-      </td>
+      <td></td>
+      <td>Picnic</td>
+      <td>Hash-based</td>
+      <td>1, 3, 5</td>
+      <td>33~65</td>
+      <td>49~97</td>
+      <td>34036~209510</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
-      <td>
-         SPHINCS+
-      </td>
-      <td>
-         Hash-based
-      </td>
-      <td>
-         1, 3, 5
-      </td>
-      <td>
-         32~64
-      </td>
-      <td>
-         64~128
-      </td>
-      <td>
-         7856~49856
-      </td>
+      <td></td>
+      <td>SPHINCS+</td>
+      <td>Hash-based</td>
+      <td>1, 3, 5</td>
+      <td>32~64</td>
+      <td>64~128</td>
+      <td>7856~49856</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
-      <td>
-         GeMSS
-      </td>
-      <td>
-         Multivariate-based
-      </td>
-      <td>
-         1, 3, 5
-      </td>
-      <td>
-         352190~3135590
-      </td>
-      <td>
-         128~256
-      </td>
-      <td>
-         258~600
-      </td>
+      <td></td>
+      <td>GeMSS</td>
+      <td>Multivariate-based</td>
+      <td>1, 3, 5</td>
+      <td>352190~3135590</td>
+      <td>128~256</td>
+      <td>258~600</td>
    </tr>
    <tr>
-      <td>
-         
-      </td>
+      <td></td>
    </tr>
 </table>
 

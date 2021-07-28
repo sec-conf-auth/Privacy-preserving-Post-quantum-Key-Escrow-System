@@ -17,6 +17,14 @@ As shown in Table 1 attached as Appendix A, we summarize the details of all the 
 
 We also summarize the details of all the nine PQ KEM algorithms in Table 2 attached as Appendix A. Just like the PQ signature algorithms, all the PQ KEM algorithms can achieve different NIST security levels by using different key lengths and related parameters.
 
+|Alg.types| Algorithms names | Alg.subtypes| Claimed NIST security level| Public key size (bytes)|Private key size (bytes) | Signature size (bytes)|
+|--|--|--|--|--|--|--|
+| Digital signature |CRYSTALS-DILITHIUM  | Lattice-based     | 2, 3, 5|1312~2592     |2528~4864  |2420~4595    |
+| Digital signature | FALCON             | Lattice-based     | 1, 5   |897~1793      |1281~2305  |690~1330     |
+| Digital signature | Rainbow            | Multivariate-based| 1, 3, 5|60192~1930600 |64~1408736 |66~212       |
+| Digital signature | Picnic             | Hash-based        | 1, 3, 5|33~65         |49~97      |34036~209510 |
+| Digital signature | SPHINCS+           | Hash-based        | 1, 3, 5|32~64         |64~128     |7856~49856   |
+| Digital signature | GeMSS              | Multivariate-based| 1, 3, 5|352190~3135590|128~256    |258~600      |
 # References
 [1]	M. Ajtai. 1996. Generating hard instances of lattice problems (extended abstract). In STOC. Philadelphia, PA, USA, 99–108.
 

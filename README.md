@@ -434,6 +434,8 @@ We divide all the PQ algorithms into three groups, namely level 1-2, level 3, le
   </td>
  </tr>
 </table>
+                           `talbe 1`
+The full list of the experiment data and related explanation can be found in the folder "ExperimentData".
 
 # References
 [1] Liboqs, https://github.com/open-quantum-safe/liboqs

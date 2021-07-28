@@ -19,11 +19,18 @@ We also summarize the details of all the nine PQ KEM algorithms in Table 2 attac
 
 # References
 [1]	M. Ajtai. 1996. Generating hard instances of lattice problems (extended abstract). In STOC. Philadelphia, PA, USA, 99–108.
+
 [2]	Vadim Lyubashevsky. 2009. Fiat-Shamir with Aborts: Applications to Lattice and Factoring-Based Signatures. In ASIACRYPT. Tokyo, Japan, 598–616.
+
 [3]	Melissa Chase, David Derler, Steven Goldfeder, Claudio Orlandi, Sebastian Ramacher, Christian Rechberger, Daniel Slamanig, Greg Zaverucha. 2017. Post-Quantum Zero-Knowledge and Signatures from Symmetric-Key Primitives. In CCS. Dallas, Texas, USA, 1825–1842.
+
 [4]	Oded Regev. 2009. On lattices, learning with errors, random linear codes, and cryptography. Journal of the ACM 56, 6, (2009), 1–40.
+
 [5]	Vadim Lyubashevsky, Chris Peikert, Oded Regev. 2013. On Ideal Lattices and Learning with Errors over Rings. Journal of the ACM 60, 6, (2013), 1–35.
+
 [6]	Adeline Langlois, Damien Stehle. 2015. Worst-case to average-case reductions for module lattices. Designs, Codes and Cryptography 75, (2015), 565–599.
+
 [7]	Elwyn R. Berlekamp, Robert J. McEliece, Henk C. A. Van Tilborg. 1978. On the inherent intractability of certain coding problems (Corresp.). IEEE Transactions on Information Theory 24, 3, (1978), 384–386.
+
 [8]	Andrew Childs, David Jao, Vladimir Soukharev. 2013. Constructing elliptic curve isogenies in quantum subexponential time. Journal of Mathematical Cryptology 8, (2013), 1–29.
 

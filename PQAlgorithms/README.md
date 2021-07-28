@@ -18,8 +18,4 @@ As shown in Table 1 attached as Appendix A, we summarize the details of all the 
 We also summarize the details of all the nine PQ KEM algorithms in Table 2 attached as Appendix A. Just like the PQ signature algorithms, all the PQ KEM algorithms can achieve different NIST security levels by using different key lengths and related parameters.
 
 
-方案|项目     | Value
-的|-------- | -----
-|电脑  | $1600
-|手机  | $12
-|导管  | $1
+

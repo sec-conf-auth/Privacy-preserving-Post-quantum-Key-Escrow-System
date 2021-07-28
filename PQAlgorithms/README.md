@@ -25,6 +25,7 @@ We also summarize the details of all the nine PQ KEM algorithms in Table 2 attac
 | Digital signature | Picnic             | Hash-based        | 1, 3, 5|33~65         |49~97      |34036~209510 |
 | Digital signature | SPHINCS+           | Hash-based        | 1, 3, 5|32~64         |64~128     |7856~49856   |
 | Digital signature | GeMSS              | Multivariate-based| 1, 3, 5|352190~3135590|128~256    |258~600      |
+                                             Table 1
 # References
 [1]	M. Ajtai. 1996. Generating hard instances of lattice problems (extended abstract). In STOC. Philadelphia, PA, USA, 99–108.
 

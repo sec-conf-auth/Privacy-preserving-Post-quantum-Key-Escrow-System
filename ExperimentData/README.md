@@ -1,4 +1,4 @@
-The experiment data for the three security groups (i.e., level 1~2, 3 and 4~5) are separately summarized in three Excel files in this folder. 
+The experiment data for the three security groups (i.e., level 1-2, 3 and 4-5) are separately summarized in three Excel files in this folder. 
 
 In each Excel file, on one hand, we record the execution time of user operations in the system (i.e., CertCA/ID generation, CertKE generation, certificate chain verification, CertCA/ID query, CertKE query, certificate revoke, encapsulation and decapsulation). Furthermore, we test the execution time of the basic PQ public-key cryptographic operations (i.e., signing/KEM key pair generation, CertCA/ID/KE signing and verification) in the corresponding user operations (i.e., CertCA/ID/KE generation and certificate chain verification). Roughly speaking, in most user operations, the execution time of basic PQ public-key cryptographic operations only takes a minority part of the whole execution time.
 

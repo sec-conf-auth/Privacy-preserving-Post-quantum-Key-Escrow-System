@@ -10,6 +10,16 @@ PQ Digital Signature Algorithms：In the current round of NIST call, there are s
 
 As shown in Table 1  , we summarize the details of all the six PQ digital signature algorithms. By using different key sizes and parameter sets, all the algorithms can achieve different NIST security levels (i.e., bits-of-security level), which is defined as the effort required by a classical computer to perform a brute-force attack on a given-length cryptographic key. Normally NIST security levels 1~5 approximately imply 128/160/192/224/256-bits-of security levels.
 
+       Table 1：Details of PQ digital signature algorithms in the current round of NIST call for national standards.
+| Algorithms names | Alg.subtypes| Claimed NIST security level| Public key size (bytes)|Private key size (bytes) | Signature size (bytes)|
+|--|--|--|--|--|--|
+|CRYSTALS-DILITHIUM  | Lattice-based     | 2, 3, 5|1312~2592     |2528~4864  |2420~4595    |
+| FALCON             | Lattice-based     | 1, 5   |897~1793      |1281~2305  |690~1330     |
+| Rainbow            | Multivariate-based| 1, 3, 5|60192~1930600 |64~1408736 |66~212       |
+| Picnic             | Hash-based        | 1, 3, 5|33~65         |49~97      |34036~209510 |
+| SPHINCS+           | Hash-based        | 1, 3, 5|32~64         |64~128     |7856~49856   |
+| GeMSS              | Multivariate-based| 1, 3, 5|352190~3135590|128~256    |258~600      |
+
  PQ KEM Algorithms：In the current round of NIST call, there are nine PQ KEM algorithms, which can be divided into three following groups.
 
 ●	Lattice-based cryptosystems. The lattice problems that NIST PQ KEM algorithms depend on are Learning With Errors (LWE) [4], Ring Learning With Errors (Ring-LWE) [5] and Module Learning with Rounding (MLWR) problem [6] with different lattices. And the list of NIST PQ KEM algorithms includes KYBER, NTRU, SABER, FrodoKEM and NTRU Prime, which have similar advantages just like lattice-based PQ signature algorithms.
@@ -20,18 +30,7 @@ As shown in Table 1  , we summarize the details of all the six PQ digital signat
 
 We also summarize the details of all the nine PQ KEM algorithms in Table 2 . Just like the PQ signature algorithms, all the PQ KEM algorithms can achieve different NIST security levels by using different key lengths and related parameters.
 
-
-       Table 1：Details of PQ digital signature algorithms in the current round of NIST call for national standards.
-| Algorithms names | Alg.subtypes| Claimed NIST security level| Public key size (bytes)|Private key size (bytes) | Signature size (bytes)|
-|--|--|--|--|--|--|
-|CRYSTALS-DILITHIUM  | Lattice-based     | 2, 3, 5|1312~2592     |2528~4864  |2420~4595    |
-| FALCON             | Lattice-based     | 1, 5   |897~1793      |1281~2305  |690~1330     |
-| Rainbow            | Multivariate-based| 1, 3, 5|60192~1930600 |64~1408736 |66~212       |
-| Picnic             | Hash-based        | 1, 3, 5|33~65         |49~97      |34036~209510 |
-| SPHINCS+           | Hash-based        | 1, 3, 5|32~64         |64~128     |7856~49856   |
-| GeMSS              | Multivariate-based| 1, 3, 5|352190~3135590|128~256    |258~600      |
-                                                      
-                                                       
+                                   
        Table 2：Details of PQ KEM algorithms in the current round of NIST call for national standards.
 | Algorithms names | Alg.subtypes| Claimed NIST security level| Public key size (bytes)|Private key size (bytes) | Ciphertext size (bytes)|Shared secret size (bytes)|
 |--|--|--|--|--|--|--|

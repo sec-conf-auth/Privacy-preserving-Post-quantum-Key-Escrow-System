@@ -91,9 +91,9 @@ We divide all the PQ algorithms into three groups, namely level 1-2, level 3, le
        Table 1：Specific PQ Algorithm names in our analysis grouped by NIST security levels.
 |Levels | Sig. Alg. Names|KEM Alg. Names|
 |--|--|--|
-|Level 1~2| (1).Dilithium2-AES<br> (2).Falcon-512<br> (3).picnic3_L1 <br> (4).SPHINCS+-SHA256-128f-robust <br>(5).SPHINCS+-SHA256-128f-simple <br>| ▪	Kyber512-90s<br> ▪NTRU-HPS-2048-509<br>▪LightSaber-KEM<br>▪BIKE1-L1-FO<br>▪FrodoKEM-640-SHAKE<br>▪HQC-128<br>▪ntrulpr653<br>▪sntrup653<br>▪SIKE-p434<br>▪SIKE-p503<br>|
-| Level 3 | Lattice-based     | 1, 5   |
-| Level 4~5| Multivariate-based| 1, 3, 5|
+|Level 1~2| (1).Dilithium2-AES<br> (2).Falcon-512<br> (3).picnic3_L1 <br> (4).SPHINCS+-SHA256-128f-robust <br>(5).SPHINCS+-SHA256-128f-simple <br>| ▪Kyber512-90s<br> ▪NTRU-HPS-2048-509<br>▪LightSaber-KEM<br>▪BIKE1-L1-FO<br>▪FrodoKEM-640-SHAKE<br>▪HQC-128<br>▪ntrulpr653<br>▪sntrup653<br>▪SIKE-p434<br>▪SIKE-p503<br>|
+| Level 3 | (6).Dilithium3-AES<br>(7).picnic3_L3<br>(8).SPHINCS+-SHA256-192f-robust<br>(9).SPHINCS+-SHA256-192f-simple<br>    | ▪Kyber768-90s<br>▪NTRU-HPS-2048-677<br>▪Saber-KEM<br>▪BIKE1-L3-FO<br>▪FrodoKEM-976-SHAKE<br>▪HQC-192<br>▪ntrulpr761<br>▪sntrup761<br>▪SIKE-p610<br> |
+| Level 4~5| (10).Dilithium5-AES<br>(11).Falcon-1024<br>(12).picnic3_L5<br>(13).SPHINCS+-SHA256-256f-robust<br>(14).SPHINCS+-SHA256-256f-simple<br>| ▪Kyber1024-90s<br>▪NTRU-HPS-4096-821<br>▪FireSaber-KEM<br>▪FrodoKEM-1344-SHAKE<br>▪HQC-256<br>▪ntrulpr857<br>▪sntrup857<br>▪SIKE-p751|
 
                          
 The full list of the experiment data and related explanation can be found in the folder "ExperimentData".

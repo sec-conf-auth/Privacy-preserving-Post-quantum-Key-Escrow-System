@@ -1,6 +1,6 @@
 To avoid the Shor’s attack, researchers have developed PQ public-key algorithms relying on different mathematics problems other than the IF, DL or ECDL problems. Based on the mathematics problems, the PQ public-key algorithms can be classified into different families introduced as follows.
 
-PQ Digital Signature Algorithms：In the current round of NIST call, there are six PQ digital signature algorithms, which can be divided into three following groups.
+**PQ Digital Signature Algorithms**：In the current round of NIST call, there are six PQ digital signature algorithms, which can be divided into three following groups.
 
 ●	Lattice-based cryptosystems. This kind of cryptographic schemes are based on lattices, which are sets of points in n-dimensional spaces with a periodic structure. Lattice-based security schemes rely on presumed hardness of basic lattice problems like the Shortest Vector Problem (SVP) (i.e., find the shortest non-zero vector within a lattice), the Closest Vector Problem (CVP) (i.e., find a lattice vector that minimizes the distance from another target lattice) and the Shortest Independent Vectors Problem (SIVP) derived from SVP and CVP. In the current round, FALCON and CRYSTALS-DILITHIUM are lattice-based candidate algorithms and separately based on the Short Integer Solution problem (SIS) [1] over NTRU lattices and “Fiat-Shamir with Aborts” technique [2]. Lattice-based algorithms are promising quantum-resistant solutions with relatively efficient implementations, balanced key/signature sizes and strong security properties.
 
@@ -20,7 +20,7 @@ As shown in Table 1  , we summarize the details of all the six PQ digital signat
 | SPHINCS+           | Hash-based        | 1, 3, 5|32~64         |64~128     |7856~49856   |
 | GeMSS              | Multivariate-based| 1, 3, 5|352190~3135590|128~256    |258~600      |
 
- PQ KEM Algorithms：In the current round of NIST call, there are nine PQ KEM algorithms, which can be divided into three following groups.
+ **PQ KEM Algorithms**：In the current round of NIST call, there are nine PQ KEM algorithms, which can be divided into three following groups.
 
 ●	Lattice-based cryptosystems. The lattice problems that NIST PQ KEM algorithms depend on are Learning With Errors (LWE) [4], Ring Learning With Errors (Ring-LWE) [5] and Module Learning with Rounding (MLWR) problem [6] with different lattices. And the list of NIST PQ KEM algorithms includes KYBER, NTRU, SABER, FrodoKEM and NTRU Prime, which have similar advantages just like lattice-based PQ signature algorithms.
 

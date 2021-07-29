@@ -440,6 +440,9 @@ Table 1:
                          
 The full list of the experiment data and related explanation can be found in the folder "ExperimentData".
 
+# About the PQ Algorithms
+In the third (current) round of NIST call for PQ public-key algorithms, there are three digital signature (i.e., CRYSTALS-DILITHIUM , FALCON , Rainbow ) and four KEM (i.e., Classic McEliece , CRYSTALS-KYBER , NTRU , SABER ) finalist algorithms, which will continue to be reviewed for consideration for standardization at the conclusion of the third round. While at the same time, there are also three digital signature (i.e., GeMSS , Picnic , SPHINCS+ ) and five KEM (i.e., BIKE , NTRU Prime , FrodoKEM , SIKE , HQC ) alternate candidate algorithms, which are potentially standardized but most likely will not occur at the end of the third round. These alternate candidate algorithms may be reconsidered for various reasons (e.g., better performance, higher security level, broader range of hardness assumptions) in a fourth round of evaluation held by NIST.All of these are summarized in PQ Algorithms.
+
 # References
 [1] Liboqs, https://github.com/open-quantum-safe/liboqs
 

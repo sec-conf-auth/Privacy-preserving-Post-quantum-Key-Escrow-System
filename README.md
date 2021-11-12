@@ -44,7 +44,7 @@ are also available.
 2.Build the dockerfile.
 
    ```javascript
-   docker built -t ccenv:latest ./ 
+   docker build -t ccenv:latest ./ 
    ```
 
 3.Modify core.yaml.

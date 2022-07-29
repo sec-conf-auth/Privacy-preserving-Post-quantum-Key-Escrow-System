@@ -472,7 +472,7 @@ type property struct{
 
 
 //////////////////////////////////////////////////////////////////////////////
-//Read key names of the public keys and Private Data
+//API invocation interface function:Read key names of the public keys and Private Data
 //Collection names from GS key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Get_Global_Time(stub shim.ChaincodeStubInterface,args []string) pb.Response {
@@ -516,7 +516,7 @@ func (t *Sup) Get_Global_Time(stub shim.ChaincodeStubInterface,args []string) pb
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Initialize GS key, under which key names of the public keys of supervisor and escrow agents together with
+//API invocation interface function:Initialize GS key, under which key names of the public keys of supervisor and escrow agents together with
 //supervisor-related Private Data Collection names are stored
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Init_Global_Setup(stub shim.ChaincodeStubInterface,args []string) pb.Response {
@@ -564,7 +564,7 @@ func (t *Sup) Init_Global_Setup(stub shim.ChaincodeStubInterface,args []string) 
 
 
 //////////////////////////////////////////////////////////////////////////////
-//Anonymize the source data record name, store the
+//API invocation interface function:Anonymize the source data record name, store the
 //pseudonym pName under AS key and transfer part of
 //the source data (relating to the escrow agents) under
 //the EK keys
@@ -685,7 +685,7 @@ func (t *Sup) Anonymization(stub shim.ChaincodeStubInterface,args []string) pb.R
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the pseudonym pName from AS key
+//API invocation interface function:Read the pseudonym pName from AS key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Get_Anony_Setup(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	collection:=args[0]
@@ -699,7 +699,7 @@ func (t *Sup) Get_Anony_Setup(stub shim.ChaincodeStubInterface, args []string) p
 
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the anonymized escrowed session key from the EK key
+//API invocation interface function:Read the anonymized escrowed session key from the EK key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Get_Anonymized_EK(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 2 {
@@ -716,7 +716,7 @@ func (t *Sup) Get_Anonymized_EK(stub shim.ChaincodeStubInterface, args []string)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read key names of the public keys and Private Data
+//API invocation interface function:Read key names of the public keys and Private Data
 //Collection names from GS key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Get_Global_Setup(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -729,7 +729,7 @@ func (t *Sup) Get_Global_Setup(stub shim.ChaincodeStubInterface, args []string) 
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the supervisor’s public key from public ledger
+//API invocation interface function:Read the supervisor’s public key from public ledger
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Get_Super_PubKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
@@ -745,7 +745,7 @@ func (t *Sup) Get_Super_PubKey(stub shim.ChaincodeStubInterface, args []string) 
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Recover the final session key SessKey, and store
+//API invocation interface function:Recover the final session key SessKey, and store
 //SessKey under the FK key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Recover_Final_SessKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -931,7 +931,7 @@ func prod(terms []*big.Int,k int)*big.Int{
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Generate one post-quantum public/private key pair
+//API invocation interface function:Generate one post-quantum public/private key pair
 //for the supervisor, upload the public key to public
 //ledger, and store the private key off-chain
 //////////////////////////////////////////////////////////////////////////////

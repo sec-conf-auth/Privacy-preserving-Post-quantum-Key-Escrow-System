@@ -65,7 +65,7 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 
 
 
-2.Sender generate ciphertext
+2.DataSource generate ciphertext
 
 export FABRIC_CFG_PATH=$PWD/peer1
 export CORE_PEER_TLS_ENABLED=true
@@ -88,7 +88,7 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 
 
 3.Supervisor  anonymous the Source Data
--------		-----------------------------------------------------------------------
+------------------------------------------------------------------------------
 export FABRIC_CFG_PATH=$PWD/peer0
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="Org0MSP"

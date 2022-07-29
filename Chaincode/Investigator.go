@@ -19,6 +19,7 @@ import (
 
 type Recover struct{}
 
+//get creator of the user
 func GetCreator(stub shim.ChaincodeStubInterface) string {
 	creatorByte, _ := stub.GetCreator()
 	fmt.Println(string(creatorByte))
@@ -43,6 +44,7 @@ func GetCreator(stub shim.ChaincodeStubInterface) string {
 	return uname
 }
 
+//use AES to decrypt message
 func AES_Decrypt(encryptedDate []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -68,6 +70,9 @@ func (t *Recover) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success([]byte("Success invoke and not opter!!"))
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//The main entrance of the chaincode including all the APIs that can be invoked by the clients and other chaincodes.
+//////////////////////////////////////////////////////////////////////////////
 func (t *Recover) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fn, args := stub.GetFunctionAndParameters()
 	 if fn == "Dec_Secrect_Data" {
@@ -101,7 +106,7 @@ func (t *Recover) Dec_Secrect_Data(stub shim.ChaincodeStubInterface, args []stri
 	AESKeyid := senderKeyid
 	colleciton1:=string(enConBytes1[9])
 	//////////////////////////////////////////////////////////////////////////////
-	//Get the Sender Data from chain
+	//Get the source data from chain
 	//////////////////////////////////////////////////////////////////////////////
 	queryArgs = [][]byte{[]byte("Get_Source_Data"), []byte(senderKeyid), []byte(colleciton2)}
 	response := stub.InvokeChaincode("DataSource", queryArgs, "mychannel")

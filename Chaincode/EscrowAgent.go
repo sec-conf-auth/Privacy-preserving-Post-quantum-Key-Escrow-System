@@ -405,7 +405,7 @@ func (t *Dec) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Generate one post-quantum public/private key pair
+//API invocation interface function:Generate one post-quantum public/private key pair
 //for the escrow agent, upload the public key to public
 //ledger, and store the private key off-chain
 //////////////////////////////////////////////////////////////////////////////
@@ -451,7 +451,7 @@ func (t *Dec) Gen_EA_KeyPair(stub shim.ChaincodeStubInterface, args []string) pb
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the escrow agent’s public key from public ledger
+//API invocation interface function:Read the escrow agent’s public key from public ledger
 //////////////////////////////////////////////////////////////////////////////
 func (t *Dec) Get_EA_PubKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
@@ -506,7 +506,7 @@ func DownloadDecapSessionKey(encapSessionKey []byte,  privateKey_pq_KE []byte,al
 
 
 //////////////////////////////////////////////////////////////////////////////
-//Decapsulate to get one share (xi, yi) of partial session
+//API invocation interface function:Decapsulate to get one share (xi, yi) of partial session
 //key, and store the share under the PK key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Dec) Decap_Partial_SessKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -618,7 +618,7 @@ func (t *Dec) Decap_Partial_SessKey(stub shim.ChaincodeStubInterface, args []str
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the share (xi, yi) under the PK key
+//API invocation interface function:Read the share (xi, yi) under the PK key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Dec) Get_Partial_SessKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 

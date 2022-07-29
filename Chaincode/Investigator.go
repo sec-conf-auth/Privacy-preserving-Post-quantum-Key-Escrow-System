@@ -85,7 +85,7 @@ func (t *Recover) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 
 //////////////////////////////////////////////////////////////////////////////
-//Decrypt the encrypted secret data C read from SD4I key bound to Data Source chaincode by using
+//API invocation interface function:Decrypt the encrypted secret data C read from SD4I key bound to Data Source chaincode by using
 //the final session key read from FK key bound to Supervisor chaincode
 //////////////////////////////////////////////////////////////////////////////
 func (t *Recover) Dec_Secrect_Data(stub shim.ChaincodeStubInterface, args []string) pb.Response {

@@ -1,26 +1,22 @@
-# PqAuthKEM4Chain
-# About the Function of Chaincodes
-The main implementation of the PQ user authentication and key
-exchange system consists of two chaincodes, namely `PqCa` and
-`PqUser`. The `PqCa` chaincode provides
-APIs to generate the PQ key pairs together with the related
-certificates (for the CA, the user identity key and the user KEM
-key), query one certificate (based on a given serial number),
-verify one certificate (and its parent certificates in the certificate
-chain), revoke one certificate, encapsulate and decapsulate the
-shared secret between users. While the `PqUser` chaincode
-invokes the corresponding APIs in `PqCa` to query/verify one
-certificate and provides APIs to perform the encapsulation and
-decapsulation operations for the users.
+# Privacy-preserving Post-quantum Key-Escrow System
+About The Function of Chaincodes
+----------
+The main implementation of system consists of four chaincodes, namely DataSource, EscrowAgent, Investigator,and Supervisor.<br>
+<br>
+The `Sender DataSource` provides API to generate source data (i.e., the encrypted secret data C and escrowed session key) and APIs to retrieve source data as well as related publickey/record name. <br>
+<br>
+The `Investigator chaincode` only provides API to decrypt the encrypted secret data C.<br>
+<br>
+The `Supervisorr chaincode` can be invoked to generate the supervisor’s public/private key pair, get the supervisor’s public key, initialize/get the global setup, anonymize the source data record by giving a pseudonym, recover/get the final session key and get the global time/pseudonym.
+<br>
+The `EscrowAgent` is responsible to generate the escrow agent’s public/private key pair, get the escrow agent’s public key and decapsulate/get one share (xi
+, yi) of one half of the final session key.<br>
+<br>
+The `collections_config` is used to creat private collection.
 
-The data structure in the off-chain private databases is
-designed relatively simply for further development. In the off-
-chain private databases (e.g., MySQL), one key pair, the
-corresponding certificate and related information (e.g., password)
-are all stored in one line, and the certificate serial number is set as
-the key of the line.
-
-
+About The Function of Command Lines
+----------
+If developers do not want to use client codes to create post-quantum supervised secret data sharing applications, they can also use the command lines to complete the post-quantum supervised secret data sharing operations.
 
 # About the Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the

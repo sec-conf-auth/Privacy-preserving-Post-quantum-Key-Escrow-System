@@ -16,19 +16,19 @@ The `collections_config` is used to creat private collection.
 
 About The Function of Command Lines
 ----------
-If developers do not want to use client codes to create post-quantum supervised secret data sharing applications, they can also use the command lines to complete the post-quantum supervised secret data sharing operations.
+If developers do not want to develop client codes to create post-quantum supervised secret data sharing applications, they can also use the command lines to complete the post-quantum supervised secret data sharing operations.
 
 # About the Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the
 native Hyperledger Fabric docker image for chaincode execution,
 we build a new docker image integrated with liboqs based on Ubuntu 18.04 and use it as the execution environment of our
 chaincodes. The versions of docker and docker-compose we use
-are 19.03.13 and 1.25.0-rc1. For developers, the configuration
+are 20.10.8 and 1.25.0. For developers, the configuration
 files for the client codes, the docker file to generate the new
 docker image and information about how to use the new image
 are also available.
 
-1.In ccenv dockerfile, use the `Ubuntu18.04` as the docker image environment, download and install `liboqs library` required for the experiment, install and configure the Go env(`go1.15.7.linux-amd64.tar.gz`).
+1.In ccenv dockerfile, use the `Ubuntu18.04` as the docker image environment, download and install `liboqs library` required for the experiment, install and configure the Go env(`go1.16.7.linux-amd64.tar.gz`).
 
 2.Build the dockerfile.
 

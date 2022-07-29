@@ -1,0 +1,99 @@
+[
+ {
+   "name": "001Alice_DS_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org1MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org1MSP.peer')"
+   }
+ },
+ {
+   "name": "IS_PDC",
+   "policy": "OR('Org0MSP.member', 'Org2MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org2MSP.peer')"
+   }
+  },
+ {
+   "name": "001Alice_DS_I_PDC",
+   "policy": "OR('Org1MSP.member', 'Org2MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org1MSP.peer', 'Org2MSP.peer')"
+   }
+  },
+ {
+   "name": "EA1_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org3MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org3MSP.peer')"
+   }
+  },
+ {
+   "name": "EA2_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org4MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org4MSP.peer')"
+   }
+  },
+ {
+   "name": "EA3_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org5MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org5MSP.peer')"
+   }
+  },
+ {
+   "name": "EA4_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org6MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org6MSP.peer')"
+   }
+  },
+ {
+   "name": "EA5_S_PDC",
+   "policy": "OR('Org0MSP.member', 'Org7MSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 2,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('Org0MSP.peer', 'Org7MSP.peer')"
+   }
+  }
+]
+

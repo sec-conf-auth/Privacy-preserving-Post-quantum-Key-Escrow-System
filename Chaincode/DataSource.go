@@ -44,6 +44,9 @@ func (t *Sender) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success([]byte("Success invoke and not opter!!"))
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//The main entrance of the chaincode including all the APIs that can be invoked by the clients and other chaincodes.
+//////////////////////////////////////////////////////////////////////////////
 func (t *Sender) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fn, args := stub.GetFunctionAndParameters()
 	if fn == "Gen_Source_Data" {
@@ -133,7 +136,9 @@ type esPKKeyid struct{
 	  x string;
 	 
 }
-
+/////////////////////////////////////////////////////////////////////
+// encap Sessionkey which is used to be encapsulated by PQ key Encapsulatioon
+/////////////////////////////////////////////////////////////////////
 func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byte, error){
 	kemName := algName_pq
 	kemer := oqs.KeyEncapsulation{}
@@ -142,9 +147,6 @@ func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byt
 		log.Fatal(err)
 		return nil,  nil, err
 	}
-	/////////////////////////////////////////////////////////////////////
-	// Sessionkey is used to be encapsulated by PQ key Encapsulatioon
-	/////////////////////////////////////////////////////////////////////
 	fmt.Println("\nThe details of the KEM algorithm is:\n", kemer.Details().String())
 
 	encapSessionKey, sessionKey, err := kemer.EncapSecret(pubKey_pq)
@@ -221,7 +223,7 @@ func (t *Sender) Gen_Source_Data(stub shim.ChaincodeStubInterface, args []string
 	for i:=0;i<l;i++{
 	response[i].x, _ = stub.GetState(EsPKKeyid[i].x)
 	//////////////////////////////////////////////////////////////////////////////
-	//Use EncapSecret function to generate CT[i],SS[i]
+	//Use EncapSecret function to generate CT[i],SS[i](sharedscret)
 	//////////////////////////////////////////////////////////////////////////////
 	CT[i].x, SSecret[i].x,  err = GenEncapUploadSessionKey(kemName,response[i].x)
 	if err != nil {
@@ -313,7 +315,7 @@ func (t *Sender) Gen_Source_Data(stub shim.ChaincodeStubInterface, args []string
 	fmt.Println("coe[q+1]=",coe[q+1],"q+1=",q+1)
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	//Use the SS[i] as the value of X and then generate the Y
+	//Use the SS[i] as the value of Xi and then generate the Yi
 	//////////////////////////////////////////////////////////////////////////////
 	for j:=0;j<l;j++ {
 	x:=big.NewInt(1)
@@ -352,7 +354,7 @@ func (t *Sender) Gen_Source_Data(stub shim.ChaincodeStubInterface, args []string
 		return shim.Error(err.Error())
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	//Put the combine messages and CT on chain
+	//Put the combined messages and CT on chain
 	//////////////////////////////////////////////////////////////////////////////
 	ycombineBytes = bytes.Join([][]byte{ycombineBytes,countCT}, []byte("-----"))
 	combineBytes:=bytes.Join([][]byte{ycombineBytes,v}, []byte(")))))"))

@@ -20,14 +20,7 @@ corresponding certificate and related information (e.g., password)
 are all stored in one line, and the certificate serial number is set as
 the key of the line.
 
-# About the Function of Client Codes
-Besides the chaincodes, we also develop client codes to help
-developers create their applications based on the PQ user
-authentication and key exchange system. 
-There are two client codes, namely `PqCa_Cli` and `PqUser_Cli`,
-which are written in Go and used to invoke the APIs in the
-corresponding chaincodes. The configuration file (e.g.,`connection-profile.yaml`)for the client
-codes to invoke the chaincodes is also provided.
+
 
 # About the Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the

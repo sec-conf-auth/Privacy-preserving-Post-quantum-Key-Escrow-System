@@ -20,7 +20,7 @@ import (
 
 type Sender struct{}
 
-
+//internal function
 func AES_Encrypt(privData []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -45,7 +45,7 @@ func (t *Sender) Init(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//The main entrance of the chaincode including all the APIs that can be invoked by the clients and other chaincodes.
+//API invocation interface function:The main entrance of the chaincode including all the APIs that can be invoked by the clients and other chaincodes.
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sender) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fn, args := stub.GetFunctionAndParameters()
@@ -76,7 +76,7 @@ func BytesToInt(bys []byte) int {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read all the public keys of the supervisor and escrow
+//API invocation interface function:Read all the public keys of the supervisor and escrow
 //agents based on GS key (bound to Supervisor chaincode)
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sender) Get_Pub_Key(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -137,7 +137,7 @@ type esPKKeyid struct{
 	 
 }
 /////////////////////////////////////////////////////////////////////
-// encap Sessionkey which is used to be encapsulated by PQ key Encapsulatioon
+//internal function: encap Sessionkey which is used to be encapsulated by PQ key Encapsulatioon
 /////////////////////////////////////////////////////////////////////
 func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byte, error){
 	kemName := algName_pq
@@ -158,7 +158,7 @@ func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byt
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Retrieve the secret data M from off-chain private
+//API invocation interface function:Retrieve the secret data M from off-chain private
 //database, generate and upload source data (i.e., store
 //the encrypted M and escrowed session key separately
 //under SD4S and SD4I keys)
@@ -375,7 +375,7 @@ func (t *Sender) Gen_Source_Data(stub shim.ChaincodeStubInterface, args []string
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the source data (i.e., the encrypted M and escrowed session key) from SD4S and SD4I keys
+//API invocation interface function:Read the source data (i.e., the encrypted M and escrowed session key) from SD4S and SD4I keys
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sender) Get_Source_Data(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
@@ -389,7 +389,7 @@ func (t *Sender) Get_Source_Data(stub shim.ChaincodeStubInterface, args []string
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//Read the source data record name (i.e., the concatenation of data source ID id and the time interval t
+//API invocation interface function:Read the source data record name (i.e., the concatenation of data source ID id and the time interval t
 //during which the record is generated) from RN key
 //////////////////////////////////////////////////////////////////////////////
 func (t *Sender) Get_Record_Name(stub shim.ChaincodeStubInterface, args []string) pb.Response {

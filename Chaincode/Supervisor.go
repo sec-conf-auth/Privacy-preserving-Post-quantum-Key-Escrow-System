@@ -97,7 +97,7 @@ func BytesToInt(bys []byte) int {
     binary.Read(bytebuff, binary.BigEndian, &data)
     return int(data)
 }
-
+//generate Merkle Root
 func GenerateZKMerkleRoot(dataList [][]byte, seed []byte) []byte {
 	sequence := GenerateSequence256(seed, len(dataList))
 	newDataList := make([][]byte, len(dataList))
@@ -106,6 +106,8 @@ func GenerateZKMerkleRoot(dataList [][]byte, seed []byte) []byte {
 	}
 	return CalcMerkleRoot(newDataList)
 }
+
+//Genertate Merkle Evidence
 func GenerateZKMerkleEvidence(dataList [][]byte, seed []byte, idx uint64) (*ZKEvidence, error) {
 	sequence := GenerateSequence256(seed, len(dataList))
 	newDataList := make([][]byte, len(dataList))
@@ -287,7 +289,7 @@ func CalcMerkleRoot(dataList [][]byte) []byte {
 	return hashes[len(hashes)-1]
 }
 
-// 
+// Pove the evidence
 func Prove(evidence *Evidence) bool {
 	txid := getHash(evidence.RawData)
 	merkleRoot := evidence.MerkleRoot
@@ -379,7 +381,7 @@ func GetCreator(stub shim.ChaincodeStubInterface) string {
 	uname := cert.Subject.CommonName
 	return uname
 }
-
+//use AES to decrypt the message
 func AES_Decrypt(encryptedDate []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -405,6 +407,9 @@ func (t *Sup) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success([]byte("Success invoke and not opter!!"))
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//The main entrance of the chaincode including all the APIs that can be invoked by the clients and other chaincodes.
+//////////////////////////////////////////////////////////////////////////////
 func (t *Sup) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fn, args := stub.GetFunctionAndParameters()
 	 if fn == "Recover_Final_SessKey" {
@@ -878,6 +883,8 @@ func (t *Sup) Get_Final_SessKey(stub shim.ChaincodeStubInterface, args []string)
 	}
 	return shim.Success(result)
 }
+
+//internal function:under 3 function are used to do the LagrangeInsert
 func LagrangeInsert(Key []Data,k int,r *big.Int)*big.Int{
 	s:=big.NewInt(1)
 	secret:=big.NewInt(0)
@@ -956,7 +963,7 @@ func (t *Sup) Gen_Super_KeyPair(stub shim.ChaincodeStubInterface, args []string)
 	return shim.Success([]byte("Put public key successfully!!!------privateKey:" + strPriKey))
 }
 
-
+//encap to get CT and sessionkey
 func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byte, error){
 	kemName := algName_pq
 	kemer := oqs.KeyEncapsulation{}
@@ -978,13 +985,8 @@ func GenEncapUploadSessionKey(algName_pq string,pubKey_pq []byte)([]byte,  []byt
 	return encapSessionKey, sessionKey, nil
 }
 
+//decap to get sessionkey
 func DownloadDecapSessionKey(encapSessionKey []byte,  privateKey_pq_KE []byte,algName_pq string)([]byte, error){
-
-	/////////////////////////////////////////////////////////////////////
-	//Decode the PQ private key from PEM in the given certKE
-	//in order to decapsulate sessionKey
-	/////////////////////////////////////////////////////////////////////
-
 	kemer := oqs.KeyEncapsulation{}
 	defer kemer.Clean() // clean up even in case of panic
 	if err := kemer.Init(algName_pq, privateKey_pq_KE); err != nil {

@@ -7,9 +7,9 @@ The `Sender DataSource` provides API to generate source data (i.e., the encrypte
 <br>
 The `Investigator chaincode` only provides API to decrypt the encrypted secret data C.<br>
 <br>
-The `Supervisorr chaincode` can be invoked to generate the supervisor’s public/private key pair, get the supervisor’s public key, initialize/get the global setup, anonymize the source data record by giving a pseudonym, recover/get the final session key and get the global time/pseudonym.<br>
+The `Supervisor chaincode` can be invoked to generate the supervisor’s public/private key pair, get the supervisor’s public key, initialize/get the global setup, anonymize the source data record by giving a pseudonym, recover/get the final session key and get the global time/pseudonym.<br>
 <br>
-The `EscrowAgent` is responsible to generate the escrow agent’s public/private key pair, get the escrow agent’s public key and decapsulate/get one share (xi
+The `Escrow Agent` is responsible to generate the escrow agent’s public/private key pair, get the escrow agent’s public key and decapsulate/get one share (xi
 , yi) of one half of the final session key.<br>
 <br>
 The `collections_config` is used to creat private collection.

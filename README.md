@@ -16,7 +16,7 @@ The `collections_config` is used to creat private collection.
 
 About The Function of Command Lines
 ----------
-If developers do not want to develop client codes to create post-quantum supervised secret data sharing applications, they can also use the command lines to complete the post-quantum supervised secret data sharing operations.
+if the developers want to develop its own client codes, the command lines can show how to invoke the chaincodes and related APIs.
 
 # About the Use of Docker Image
 In the experiments , we utilize the liboqs 0.6.0 library [1] together with its Go wrapper [2] to generate public/private key pair, encapsulate and decapsulate the shared secret for all the related post-quantum KEM algorithms. Since the liboqs library is incompatible with the
